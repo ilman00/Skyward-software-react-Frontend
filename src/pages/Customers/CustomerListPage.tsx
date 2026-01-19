@@ -1,6 +1,6 @@
 import React from "react";
 
-import CustomerForm from "../../components/Customres/CustomerList";
+import CustomerForm from "../../components/Customers/CustomerList";
 
 const CustomerPage: React.FC = () => {
   return (

@@ -12,7 +12,7 @@ const Navbar: FC = () => {
       <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
         
         {/* LOGO */}
-        <Link to="/" className="flex items-center gap-3">
+        <Link to="/admin-dashboard" className="flex items-center gap-3">
           <img
             src="/logo.png"
             alt="Company Logo"

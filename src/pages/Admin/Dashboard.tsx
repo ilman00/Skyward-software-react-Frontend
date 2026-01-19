@@ -63,8 +63,8 @@ const DashboardPage: FC = () => {
                         icon={<PlusCircle size={20} />}
                     />
                     <ActionButton
-                        href="/reports"
-                        label="Full Reports"
+                        href="/smds-sell"
+                        label="SMD Sell"
                         icon={<Eye size={20} />}
                     />
                 </div>

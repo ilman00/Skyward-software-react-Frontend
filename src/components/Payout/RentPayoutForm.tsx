@@ -1,31 +1,18 @@
-import React, { useState, type ChangeEvent, type FormEvent } from "react";
-import { Save, Loader2 } from "lucide-react";
+import React, { useState, type FormEvent } from "react";
+import AsyncSelect from "react-select/async";
+import { AlertCircle } from "lucide-react";
 
 /* ------------------ TYPES ------------------ */
-interface Customer {
-  id: string;
-  name: string;
-}
-
 interface SMD {
-  id: string;
-  name: string;
-  customer_id: string;
+  smd_id: string;
+  smd_code: string;
 }
 
-/* ------------------ MOCK DATA ------------------ */
-const CUSTOMERS: Customer[] = [
-  { id: "c1", name: "Ali Traders" },
-  { id: "c2", name: "Khan Electronics" },
-];
+interface CustomerOption {
+  label: string;
+  value: string;
+}
 
-const SMDS: SMD[] = [
-  { id: "smd1", name: "SMD DHA Phase 1", customer_id: "c1" },
-  { id: "smd2", name: "SMD Gulberg", customer_id: "c1" },
-  { id: "smd3", name: "SMD Blue Area", customer_id: "c2" },
-];
-
-/* ------------------ FORM DATA ------------------ */
 export interface RentPayoutFormData {
   customer_id: string;
   smd_closing_id: string;
@@ -33,13 +20,22 @@ export interface RentPayoutFormData {
   amount: string;
 }
 
-interface RentPayoutFormProps {
-  onSubmit?: (data: RentPayoutFormData) => Promise<void> | void;
+interface Props {
+  onSubmit: (data: RentPayoutFormData) => Promise<void>;
+  loadCustomers: (input: string) => Promise<CustomerOption[]>;
+  getSmdByCustomer: (customerId: string) => Promise<void>;
+  smds: SMD[];
+  isLoadingSmds: boolean;
 }
 
-const RentPayoutForm: React.FC<RentPayoutFormProps> = ({ onSubmit }) => {
+const RentPayoutForm: React.FC<Props> = ({
+  onSubmit,
+  loadCustomers,
+  getSmdByCustomer,
+  smds,
+  isLoadingSmds,
+}) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [form, setForm] = useState<RentPayoutFormData>({
     customer_id: "",
     smd_closing_id: "",
@@ -47,136 +43,148 @@ const RentPayoutForm: React.FC<RentPayoutFormProps> = ({ onSubmit }) => {
     amount: "",
   });
 
-  /* ------------------ HANDLERS ------------------ */
-  const handleCustomerChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const customer_id = e.target.value;
-    setForm({
-      ...form,
-      customer_id,
-      smd_closing_id: "", // reset SMD
-    });
-  };
-
-  const handleSmdChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const smdId = e.target.value;
-    const smd = SMDS.find((s) => s.id === smdId);
-
-    setForm({
-      ...form,
-      smd_closing_id: smdId,
-      customer_id: smd ? smd.customer_id : "",
-    });
-  };
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!onSubmit) return;
-
     setIsSubmitting(true);
     try {
       await onSubmit(form);
+      setForm({
+        customer_id: "",
+        smd_closing_id: "",
+        payout_month: "",
+        amount: "",
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  /* ------------------ FILTERED DATA ------------------ */
-  const filteredSMDs = form.customer_id
-    ? SMDS.filter((s) => s.customer_id === form.customer_id)
-    : SMDS;
-
-  /* ------------------ UI ------------------ */
-  const label = "block text-sm font-medium text-gray-700 mb-1";
-  const input =
-    "w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500";
-
   return (
-    <div className="max-w-xl mx-auto bg-white p-6 rounded-xl border mt-8 ">
-      <h2 className="text-xl font-bold mb-4">Rent Payout</h2>
+    <div className="max-w-xl mx-auto bg-white p-6 rounded-xl border shadow-sm mt-8">
+      <h2 className="text-xl font-bold mb-6 border-b pb-3">
+        Rent Payout
+      </h2>
 
       <form onSubmit={handleSubmit} className="space-y-5">
+
         {/* Customer */}
         <div>
-          <label className={label}>Customer</label>
-          <select
-            value={form.customer_id}
-            onChange={handleCustomerChange}
-            className={input}
-          >
-            <option value="">-- Select Customer --</option>
-            {CUSTOMERS.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
+          <label className="block text-sm font-medium mb-1">
+            Customer
+          </label>
+          <AsyncSelect
+            cacheOptions
+            defaultOptions
+            loadOptions={loadCustomers}
+            placeholder="Search customer..."
+            onChange={(opt) => {
+              const customerId = opt?.value || "";
+              setForm(prev => ({
+                ...prev,
+                customer_id: customerId,
+                smd_closing_id: "",
+              }));
+
+              if (customerId) {
+                getSmdByCustomer(customerId);
+              }
+            }}
+          />
         </div>
 
         {/* SMD */}
         <div>
-          <label className={label}>SMD</label>
+          <label className="block text-sm font-medium mb-1">
+            SMD
+          </label>
           <select
             value={form.smd_closing_id}
-            onChange={handleSmdChange}
-            className={input}
+            onChange={e =>
+              setForm(prev => ({
+                ...prev,
+                smd_closing_id: e.target.value,
+              }))
+            }
+            className="w-full border px-3 py-2 rounded-md"
+            disabled={!form.customer_id || isLoadingSmds}
+            required
           >
-            <option value="">-- Select SMD --</option>
-            {filteredSMDs.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name}
+            <option value="">
+              {isLoadingSmds
+                ? "Loading SMDs..."
+                : "Select SMD"}
+            </option>
+
+            {smds.map(s => (
+              <option key={s.smd_id} value={s.smd_id}>
+                {s.smd_code}
               </option>
             ))}
           </select>
-        </div>
 
-        {/* Month */}
-        <div>
-          <label className={label}>Payout Month</label>
-          <input
-            type="month"
-            name="payout_month"
-            value={form.payout_month}
-            onChange={handleChange}
-            className={input}
-          />
-        </div>
-
-        {/* Amount */}
-        <div>
-          <label className={label}>Amount</label>
-          <input
-            type="number"
-            name="amount"
-            value={form.amount}
-            onChange={handleChange}
-            className={input}
-            placeholder="PKR"
-          />
-        </div>
-
-        {/* Actions */}
-        <div className="flex justify-end pt-3">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="flex items-center gap-2 px-6 py-2 bg-blue-800 text-white rounded-md disabled:opacity-60"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 size={16} className="animate-spin" /> Processing
-              </>
-            ) : (
-              <>
-                <Save size={16} /> Save Payout
-              </>
+          {!isLoadingSmds &&
+            form.customer_id &&
+            smds.length === 0 && (
+              <p className="text-xs text-amber-600 mt-1 flex gap-1">
+                <AlertCircle size={12} />
+                No SMDs found for this customer
+              </p>
             )}
-          </button>
         </div>
+
+        {/* Month & Amount */}
+        <div className="grid grid-cols-2 gap-4">
+          {/* Month Picker */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Payout Month
+            </label>
+            <input
+              type="month"
+              name="payout_month"
+              value={form.payout_month}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  payout_month: e.target.value,
+                }))
+              }
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition-all disabled:bg-gray-50 disabled:text-gray-400"
+              required
+              disabled={isSubmitting}
+            />
+          </div>
+
+          {/* Amount Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Amount
+            </label>
+            <input
+              type="number"
+              name="amount"
+              value={form.amount}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  amount: e.target.value,
+                }))
+              }
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none transition-all disabled:bg-gray-50 disabled:text-gray-400"
+              placeholder="PKR"
+              required
+              disabled={isSubmitting}
+            />
+          </div>
+        </div>
+
+
+        <button
+          disabled={!form.smd_closing_id || isSubmitting}
+          className="bg-blue-800 text-white px-6 py-2 rounded-md"
+        >
+          {isSubmitting ? "Saving..." : "Save Payout"}
+        </button>
       </form>
     </div>
   );

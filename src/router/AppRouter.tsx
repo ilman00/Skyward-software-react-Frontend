@@ -16,6 +16,8 @@ import SmdClosedPage from "../pages/SmdClosed/SmdClosedPage";
 import StaffListPage from "../pages/Staff/StaffListPage";
 import PayoutPage from "../pages/Payout/PayoutPage";
 import RegisterPage from "../pages/Register";
+import OTPVerificationPage from "../pages/OtpVerificationPage";
+import SmdClosingFormPage from "../pages/SmdClosed/SmdClosingFormPage";
 
 
 const AppRouter = () => {
@@ -24,6 +26,7 @@ const AppRouter = () => {
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/verify-otp" element={<OTPVerificationPage />} />
             <Route path="/unauthorized" element={<div>Unauthorized Access</div>} />
             <Route
                 path="/admin-dashboard"
@@ -114,6 +117,16 @@ const AppRouter = () => {
                     </ProtectedRoute>
                 }
             />
+
+            <Route
+                path="/smds-sell"
+                element={
+                    <ProtectedRoute roles={["admin", "staff"]}>
+                        <SmdClosingFormPage />
+                    </ProtectedRoute>
+                }
+            />
+
 
             <Route
                 path="/closed-deals"

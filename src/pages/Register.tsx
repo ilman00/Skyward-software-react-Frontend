@@ -38,7 +38,7 @@ const RegisterPage: React.FC = () => {
       });
 
       // Redirect to login or dashboard on success
-      navigate("/login", { state: { message: "Account created successfully!" } });
+      navigate("/verify-otp", { state: { email: formData.email } });
     } catch (err: any) {
       setError(err.response?.data?.message || "Registration failed. Please try again.");
     } finally {

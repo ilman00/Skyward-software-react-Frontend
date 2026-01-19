@@ -26,7 +26,7 @@ const PAGE_SIZE = 8;
 const MarketersList: React.FC = () => {
     const [marketers, setMarketers] = useState<Marketer[]>(MOCK_MARKETERS);
     const [page, setPage] = useState(1);
-    
+
     // Inline Edit State
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editForm, setEditForm] = useState<Partial<Marketer>>({});
@@ -42,14 +42,14 @@ const MarketersList: React.FC = () => {
 
     const handleStartEdit = (m: Marketer) => {
         setEditingId(m.id);
-        setEditForm({ 
-            commission_type: m.commission_type, 
-            commission_value: m.commission_value 
+        setEditForm({
+            commission_type: m.commission_type,
+            commission_value: m.commission_value
         });
     };
 
     const handleSave = (id: string) => {
-        setMarketers(prev => prev.map(m => 
+        setMarketers(prev => prev.map(m =>
             m.id === id ? { ...m, ...editForm } as Marketer : m
         ));
         setEditingId(null);
@@ -107,7 +107,7 @@ const MarketersList: React.FC = () => {
                                                 {isEditing ? (
                                                     <select
                                                         value={editForm.commission_type}
-                                                        onChange={(e) => setEditForm({...editForm, commission_type: e.target.value as any})}
+                                                        onChange={(e) => setEditForm({ ...editForm, commission_type: e.target.value as any })}
                                                         className="w-full border border-blue-300 rounded-lg px-2 py-1.5 text-sm outline-none ring-4 ring-blue-50"
                                                     >
                                                         <option value="Percentage">Percentage</option>
@@ -115,7 +115,7 @@ const MarketersList: React.FC = () => {
                                                     </select>
                                                 ) : (
                                                     <span className={`inline-flex items-center gap-1 text-sm font-medium ${m.commission_type === 'Percentage' ? 'text-indigo-600' : 'text-emerald-600'}`}>
-                                                        {m.commission_type === 'Percentage' ? <Percent size={14}/> : <DollarSign size={14}/>}
+                                                        {m.commission_type === 'Percentage' ? <Percent size={14} /> : <DollarSign size={14} />}
                                                         {m.commission_type}
                                                     </span>
                                                 )}
@@ -125,7 +125,7 @@ const MarketersList: React.FC = () => {
                                                     <input
                                                         type="number"
                                                         value={editForm.commission_value}
-                                                        onChange={(e) => setEditForm({...editForm, commission_value: Number(e.target.value)})}
+                                                        onChange={(e) => setEditForm({ ...editForm, commission_value: Number(e.target.value) })}
                                                         className="w-24 border border-blue-300 rounded-lg px-2 py-1.5 text-sm outline-none ring-4 ring-blue-50"
                                                     />
                                                 ) : (
@@ -163,7 +163,7 @@ const MarketersList: React.FC = () => {
 
                     {/* Pagination Footer */}
                     <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
-                        <button 
+                        <button
                             disabled={page === 1}
                             onClick={() => handlePageChange(page - 1)}
                             className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
@@ -176,18 +176,17 @@ const MarketersList: React.FC = () => {
                                 <button
                                     key={i + 1}
                                     onClick={() => handlePageChange(i + 1)}
-                                    className={`w-9 h-9 rounded-lg text-sm font-semibold transition-all ${
-                                        page === i + 1
+                                    className={`w-9 h-9 rounded-lg text-sm font-semibold transition-all ${page === i + 1
                                             ? "bg-blue-600 text-white shadow-md shadow-blue-200"
                                             : "bg-white border border-slate-200 text-slate-600 hover:border-blue-400"
-                                    }`}
+                                        }`}
                                 >
                                     {i + 1}
                                 </button>
                             ))}
                         </div>
 
-                        <button 
+                        <button
                             disabled={page === totalPages}
                             onClick={() => handlePageChange(page + 1)}
                             className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
