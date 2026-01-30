@@ -15,7 +15,7 @@ interface CustomerOption {
 
 export interface RentPayoutFormData {
   customer_id: string;
-  smd_closing_id: string;
+  smd_id: string; // Changed from smd_closing_id to smd_id
   payout_month: string;
   amount: string;
 }
@@ -38,7 +38,7 @@ const RentPayoutForm: React.FC<Props> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState<RentPayoutFormData>({
     customer_id: "",
-    smd_closing_id: "",
+    smd_id: "", // Updated key
     payout_month: "",
     amount: "",
   });
@@ -50,7 +50,7 @@ const RentPayoutForm: React.FC<Props> = ({
       await onSubmit(form);
       setForm({
         customer_id: "",
-        smd_closing_id: "",
+        smd_id: "",
         payout_month: "",
         amount: "",
       });
@@ -68,6 +68,7 @@ const RentPayoutForm: React.FC<Props> = ({
       <form onSubmit={handleSubmit} className="space-y-5">
 
         {/* Customer */}
+        {/* Customer */}
         <div>
           <label className="block text-sm font-medium mb-1">
             Customer
@@ -82,7 +83,7 @@ const RentPayoutForm: React.FC<Props> = ({
               setForm(prev => ({
                 ...prev,
                 customer_id: customerId,
-                smd_closing_id: "",
+                smd_id: "", // Fixed: matches your interface
               }));
 
               if (customerId) {
@@ -98,11 +99,11 @@ const RentPayoutForm: React.FC<Props> = ({
             SMD
           </label>
           <select
-            value={form.smd_closing_id}
+            value={form.smd_id} // Updated
             onChange={e =>
               setForm(prev => ({
                 ...prev,
-                smd_closing_id: e.target.value,
+                smd_id: e.target.value, // Updated
               }))
             }
             className="w-full border px-3 py-2 rounded-md"
@@ -110,9 +111,7 @@ const RentPayoutForm: React.FC<Props> = ({
             required
           >
             <option value="">
-              {isLoadingSmds
-                ? "Loading SMDs..."
-                : "Select SMD"}
+              {isLoadingSmds ? "Loading SMDs..." : "Select SMD"}
             </option>
 
             {smds.map(s => (
@@ -180,7 +179,7 @@ const RentPayoutForm: React.FC<Props> = ({
 
 
         <button
-          disabled={!form.smd_closing_id || isSubmitting}
+          disabled={!form.smd_id || isSubmitting}
           className="bg-blue-800 text-white px-6 py-2 rounded-md"
         >
           {isSubmitting ? "Saving..." : "Save Payout"}

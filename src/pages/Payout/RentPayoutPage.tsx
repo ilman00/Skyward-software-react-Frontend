@@ -22,9 +22,7 @@ const RentPayoutPage: React.FC = () => {
   const getSmdByCustomer = async (customerId: string) => {
     try {
       setIsLoadingSmds(true);
-      const res = await SmdAPIs.getSmd({
-        customer_id: customerId,
-      });
+      const res = await SmdAPIs.getSmd(customerId);
       setSmds(res.data);
     } catch (error) {
       toast.error("Failed to load SMDs");
@@ -36,16 +34,24 @@ const RentPayoutPage: React.FC = () => {
   };
 
   const handleCreatePayout = async (formData: any) => {
+  try {
     await toast.promise(
       PayoutAPIs.createRentPayout(formData),
       {
         loading: "Saving payout...",
         success: "Rent payout saved successfully!",
-        error: err =>
-          err?.response?.data?.message || "Failed to save payout",
+        error: (err) => {
+          // DEBUG: Log the error to see why the toast might be stuck
+          console.error("Payout Error:", err);
+          return err?.response?.data?.message || "Failed to save payout";
+        },
       }
     );
-  };
+  } catch (error) {
+    // This catches errors that toast.promise might not display
+    console.error("Catch block error:", error);
+  }
+};
 
   return (
     <div className="p-4">

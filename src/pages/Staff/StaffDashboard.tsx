@@ -1,17 +1,31 @@
 import { type FC } from "react";
+import { type ReactNode } from "react";
 import {
-  Users,
-  Layers,
-  DollarSign,
-  FileWarning,
-  Timer,
-  PlusCircle,
-  Eye,
+   Users,
+    UserSquare,
+    UserCheck,
+    Layers,
+    Timer,
+    DollarSign,
+    FileWarning,
+    Eye,
+    PlusCircle,
+    CheckCircle2,
 } from "lucide-react";
 
 import MetricCard from "../../components/AdminDashboard/MetricCard";
 import AlertCard from "../../components/AdminDashboard/AlertCard";
 import ActionButton from "../../components/AdminDashboard/ActionButton";
+
+interface SectionHeaderProps {
+    children: ReactNode;
+}
+
+const SectionHeader: FC<SectionHeaderProps> = ({ children }) => (
+    <h1 className="text-2xl font-bold mb-6 text-gray-800">
+        {children}
+    </h1>
+);
 
 const StaffDashboard: FC = () => {
   return (
@@ -55,7 +69,54 @@ const StaffDashboard: FC = () => {
           />
         </div>
       </section>
+      <section>
+        <SectionHeader>Management & Records</SectionHeader>
 
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+
+          <ActionButton
+            href="/staff"
+            label="All Staff"
+            icon={<Users size={18} className="text-gray-600" />}
+            variant="neutral"
+          />
+
+          <ActionButton
+            href="/marketers"
+            label="All Marketers"
+            icon={<UserSquare size={18} className="text-gray-600" />}
+            variant="neutral"
+          />
+
+          <ActionButton
+            href="/customers-list"
+            label="All Customers"
+            icon={<Users size={18} className="text-gray-600" />}
+            variant="neutral"
+          />
+
+          <ActionButton
+            href="/closed-deals"
+            label="Closed Deals"
+            icon={<CheckCircle2 size={18} className="text-gray-600" />}
+            variant="neutral"
+          />
+
+          <ActionButton
+            href="/smds"
+            label="All SMDs"
+            icon={<UserCheck size={18} className="text-gray-600" />}
+            variant="neutral"
+          />
+
+          <ActionButton
+            href="/rent-payouts"
+            label="Rent Payouts"
+            icon={<DollarSign size={18} className="text-gray-600" />}
+            variant="neutral"
+          />
+        </div>
+      </section>
       {/* ------------------ METRICS ------------------ */}
       <section>
         <h1 className="text-2xl font-bold mb-6 text-gray-800">

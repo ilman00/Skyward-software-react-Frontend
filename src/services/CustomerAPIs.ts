@@ -7,8 +7,10 @@ export const CustomerAPIs = {
         const response =  await apiClient.post("/create-customer", customerData);
         return response.data;
     },
-    getCustomers: async () => {
-        const response = await apiClient.get("/customers");
+    getCustomers: async ( page: number) => {
+        const response = await apiClient.get("/customers", {
+            params: { page },
+        });
         return response.data;
     },
 
