@@ -1,10 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import {
   Edit2,
   Trash2,
   Save,
   X,
-  UserCheck,
   Percent,
   DollarSign,
   ChevronLeft,

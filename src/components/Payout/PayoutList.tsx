@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Search, Calendar, Monitor, ChevronLeft, ChevronRight, CreditCard } from "lucide-react";
+import { 
+  Search, 
+  Calendar, 
+  Monitor, 
+  ChevronLeft, 
+  ChevronRight, 
+  CreditCard, 
+  RefreshCw, 
+  Trash2 
+} from "lucide-react";
 
 interface RentPayout {
   payout_id: string;
@@ -31,9 +40,8 @@ const RentPayoutsList: React.FC<Props> = ({ data, isLoading, refreshData, onDele
     p.smd_code.toLowerCase().includes(search.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE) || 1;
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-
 
   const confirmDelete = (id: string) => {
     if (window.confirm("Are you sure you want to delete this record? This action cannot be undone.")) {
@@ -57,7 +65,16 @@ const RentPayoutsList: React.FC<Props> = ({ data, isLoading, refreshData, onDele
         {/* Header & Search */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Rent Payouts</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl font-bold text-slate-900">Rent Payouts</h1>
+              <button 
+                onClick={refreshData}
+                className="p-2 hover:bg-slate-200 rounded-full transition-colors text-slate-600"
+                title="Refresh Data"
+              >
+                <RefreshCw size={20} />
+              </button>
+            </div>
             <p className="text-slate-500 mt-1">Total {data.length} records found</p>
           </div>
 
@@ -82,49 +99,67 @@ const RentPayoutsList: React.FC<Props> = ({ data, isLoading, refreshData, onDele
                   <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-widest text-slate-400">Amount</th>
                   <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-widest text-slate-400">Month</th>
                   <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-widest text-slate-400">Processed By</th>
+                  <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {paginated.map((p) => (
-                  <tr key={p.payout_id} className="hover:bg-slate-50/50 transition-colors">
-                    <td className="px-6 py-5">
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-slate-700">{p.customer_name}</span>
-                        <span className="text-xs text-slate-400">{p.customer_email}</span>
-                      </div>
-                    </td>
-
-                    <td className="px-6 py-5">
-                      <div className="flex flex-col gap-1">
-                        <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-slate-100 text-slate-600 rounded border border-slate-200 font-mono text-[10px] font-bold w-fit">
-                          <Monitor size={10} /> {p.smd_code}
+                {paginated.length > 0 ? (
+                  paginated.map((p) => (
+                    <tr key={p.payout_id} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="px-6 py-5">
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-slate-700">{p.customer_name}</span>
+                          <span className="text-xs text-slate-400">{p.customer_email}</span>
                         </div>
-                        <span className="text-xs text-slate-500 truncate max-w-[150px]">{p.smd_title}</span>
-                      </div>
-                    </td>
+                      </td>
 
-                    <td className="px-6 py-5">
-                      <div className="flex items-center gap-1.5 font-bold text-emerald-700">
-                        <CreditCard size={14} />
-                        <span>PKR {Number(p.amount).toLocaleString()}</span>
-                      </div>
-                    </td>
+                      <td className="px-6 py-5">
+                        <div className="flex flex-col gap-1">
+                          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-slate-100 text-slate-600 rounded border border-slate-200 font-mono text-[10px] font-bold w-fit">
+                            <Monitor size={10} /> {p.smd_code}
+                          </div>
+                          <span className="text-xs text-slate-500 truncate max-w-[150px]">{p.smd_title}</span>
+                        </div>
+                      </td>
 
-                    <td className="px-6 py-5">
-                      <div className="flex items-center gap-2 text-sm text-slate-600">
-                        <Calendar size={14} className="text-slate-400" />
-                        {new Date(p.payout_month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                      </div>
-                    </td>
+                      <td className="px-6 py-5">
+                        <div className="flex items-center gap-1.5 font-bold text-emerald-700">
+                          <CreditCard size={14} />
+                          <span>PKR {Number(p.amount).toLocaleString()}</span>
+                        </div>
+                      </td>
 
-                    <td className="px-6 py-5">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-purple-400" />
-                        <span className="text-sm font-medium text-slate-600">{p.paid_by_name}</span>
-                      </div>
+                      <td className="px-6 py-5">
+                        <div className="flex items-center gap-2 text-sm text-slate-600">
+                          <Calendar size={14} className="text-slate-400" />
+                          {new Date(p.payout_month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                        </div>
+                      </td>
+
+                      <td className="px-6 py-5">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-purple-400" />
+                          <span className="text-sm font-medium text-slate-600">{p.paid_by_name}</span>
+                        </div>
+                      </td>
+
+                      <td className="px-6 py-5 text-right">
+                        <button 
+                          onClick={() => confirmDelete(p.payout_id)}
+                          className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
+                      No records found matching your search.
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -138,14 +173,17 @@ const RentPayoutsList: React.FC<Props> = ({ data, isLoading, refreshData, onDele
               <button
                 disabled={page === 1}
                 onClick={() => setPage(page - 1)}
-                className="p-2 bg-white border border-slate-200 rounded-lg disabled:opacity-50"
+                className="p-2 bg-white border border-slate-200 rounded-lg disabled:opacity-50 hover:bg-slate-50 transition-colors"
               >
                 <ChevronLeft size={20} />
               </button>
+              <span className="text-sm font-medium text-slate-600 px-2">
+                Page {page} of {totalPages}
+              </span>
               <button
                 disabled={page === totalPages}
                 onClick={() => setPage(page + 1)}
-                className="p-2 bg-white border border-slate-200 rounded-lg disabled:opacity-50"
+                className="p-2 bg-white border border-slate-200 rounded-lg disabled:opacity-50 hover:bg-slate-50 transition-colors"
               >
                 <ChevronRight size={20} />
               </button>
