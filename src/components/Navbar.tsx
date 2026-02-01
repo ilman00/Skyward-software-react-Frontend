@@ -26,10 +26,10 @@ const Navbar: FC = () => {
         {/* DESKTOP MENU (AUTH ONLY) */}
         {isAuthenticated && (
           <div className="hidden md:flex items-center gap-8">
-            <Link to="/admin/investers" className="hover:text-blue-200">Investors</Link>
-            <Link to="/admin/smds" className="hover:text-blue-200">SMDs</Link>
+            <Link to="/admin-dashboard" className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-mdtext-blue-200">Go To Dashboard</Link>
+            {/* <Link to="/admin/smds" className="hover:text-blue-200">SMDs</Link>
             <Link to="/customers" className="hover:text-blue-200">Customers</Link>
-            <Link to="/rent" className="hover:text-blue-200">Rent</Link>
+            <Link to="/rent" className="hover:text-blue-200">Rent</Link> */}
           </div>
         )}
 
