@@ -1,6 +1,12 @@
 import  { type FC, type ReactNode } from "react";
 
-export type MetricVariant = "blue" | "success" | "warning" | "neutral";
+export type MetricVariant =
+  | "blue"
+  | "success"
+  | "warning"
+  | "neutral"
+  | "danger";
+
 
 interface MetricCardProps {
   title: string;
@@ -16,34 +22,39 @@ const MetricCard: FC<MetricCardProps> = ({
   variant = "blue",
 }) => {
   const variantStyles: Record<
-    MetricVariant,
-    {
-      accentColor: string;
-      iconColor: string;
-      bgColor: string;
-    }
-  > = {
-    blue: {
-      accentColor: "border-blue-600",
-      iconColor: "text-blue-600",
-      bgColor: "bg-blue-50",
-    },
-    success: {
-      accentColor: "border-green-600",
-      iconColor: "text-green-600",
-      bgColor: "bg-green-50",
-    },
-    warning: {
-      accentColor: "border-orange-600",
-      iconColor: "text-orange-600",
-      bgColor: "bg-orange-50",
-    },
-    neutral: {
-      accentColor: "border-gray-400",
-      iconColor: "text-gray-500",
-      bgColor: "bg-gray-100",
-    },
-  };
+  MetricVariant,
+  {
+    accentColor: string;
+    iconColor: string;
+    bgColor: string;
+  }
+> = {
+  blue: {
+    accentColor: "border-blue-600",
+    iconColor: "text-blue-600",
+    bgColor: "bg-blue-50",
+  },
+  success: {
+    accentColor: "border-green-600",
+    iconColor: "text-green-600",
+    bgColor: "bg-green-50",
+  },
+  warning: {
+    accentColor: "border-orange-600",
+    iconColor: "text-orange-600",
+    bgColor: "bg-orange-50",
+  },
+  neutral: {
+    accentColor: "border-gray-400",
+    iconColor: "text-gray-500",
+    bgColor: "bg-gray-100",
+  },
+  danger: {
+    accentColor: "border-red-600",
+    iconColor: "text-red-600",
+    bgColor: "bg-red-50",
+  },
+};
 
   const styles = variantStyles[variant];
 

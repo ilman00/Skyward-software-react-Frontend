@@ -1,163 +1,251 @@
 import { Routes, Route } from "react-router-dom";
+
+import PublicLayout from "../layouts/AppLayouts";
+import AdminLayout from "../layouts/AdminLayout";
+import ProtectedRoute from "../routes/ProtectedRoutes";
+
+// Public pages
 import Landing from "../pages/Landing";
 import LoginPage from "../pages/Login";
+import RegisterPage from "../pages/Register";
+import OTPVerificationPage from "../pages/OtpVerificationPage";
+
+// Admin / Staff pages
 import AdminDashboard from "../pages/Admin/Dashboard";
-import ProtectedRoute from "../routes/ProtectedRoutes";
-import AddSmdPage from "../pages/AddSmd"
+import StaffDashboard from "../pages/Staff/StaffDashboard";
+import AddSmdPage from "../pages/AddSmd";
 import AddRentPage from "../pages/AddRentPage";
 import MarketerPage from "../pages/Marketers/MarketerPage";
 import CustomerPage from "../pages/Customers/CustomerFormPage";
 import RentPayoutPage from "../pages/Payout/RentPayoutPage";
-import StaffDashboard from "../pages/Staff/StaffDashboard";
 import SmdListPage from "../pages/Smds/SmdListPage";
 import MarketersListPage from "../pages/Marketers/MarketerListPage";
 import CustomerListPage from "../pages/Customers/CustomerListPage";
 import SmdClosedPage from "../pages/SmdClosed/SmdClosedPage";
 import StaffListPage from "../pages/Staff/StaffListPage";
 import PayoutPage from "../pages/Payout/PayoutPage";
-import RegisterPage from "../pages/Register";
-import OTPVerificationPage from "../pages/OtpVerificationPage";
 import SmdClosingFormPage from "../pages/SmdClosed/SmdClosingFormPage";
 
-
 const AppRouter = () => {
-    return (
-        <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/verify-otp" element={<OTPVerificationPage />} />
-            <Route path="/unauthorized" element={<div>Unauthorized Access</div>} />
-            <Route
-                path="/admin-dashboard"
-                element={
-                    <ProtectedRoute roles={["admin"]}>
-                        <AdminDashboard />
-                    </ProtectedRoute>
-                }
-            />
+  return (
+    <Routes>
 
-            <Route
-                path="/add-smd"
-                element={
-                    <ProtectedRoute roles={["admin", "staff"]}>
-                        <AddSmdPage />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/add-rent-record"
-                element={
-                    <ProtectedRoute roles={["admin", "staff"]}>
-                        <AddRentPage />
-                    </ProtectedRoute>
-                }
-            />
+      {/* ---------------- PUBLIC ROUTES ---------------- */}
+      <Route
+        path="/"
+        element={
+          <PublicLayout>
+            <Landing />
+          </PublicLayout>
+        }
+      />
 
-            <Route
-                path="/add-marketer"
-                element={
-                    <ProtectedRoute roles={["admin", "staff"]}>
-                        <MarketerPage />
-                    </ProtectedRoute>
-                }
-            />
+      <Route
+        path="/login"
+        element={
+          <PublicLayout>
+            <LoginPage />
+          </PublicLayout>
+        }
+      />
 
-            <Route
-                path="/add-customer"
-                element={
-                    <ProtectedRoute roles={["admin", "staff"]}>
-                        <CustomerPage />
-                    </ProtectedRoute>
-                }
-            />
+      <Route
+        path="/register"
+        element={
+          <PublicLayout>
+            <RegisterPage />
+          </PublicLayout>
+        }
+      />
 
+      <Route
+        path="/verify-otp"
+        element={
+          <PublicLayout>
+            <OTPVerificationPage />
+          </PublicLayout>
+        }
+      />
 
-            <Route
-                path="/add-rent-payout"
-                element={
-                    <ProtectedRoute roles={["admin", "staff"]}>
-                        <RentPayoutPage />
-                    </ProtectedRoute>
-                }
-            />
+      <Route
+        path="/unauthorized"
+        element={
+          <PublicLayout>
+            <div className="p-8 text-center text-red-600 font-semibold">
+              Unauthorized Access
+            </div>
+          </PublicLayout>
+        }
+      />
 
-            <Route
-                path="/staff-dashboard"
-                element={
-                    <ProtectedRoute roles={["staff"]}>
-                        <StaffDashboard />
-                    </ProtectedRoute>
-                }
-            />
+      {/* ---------------- ADMIN / STAFF ROUTES ---------------- */}
 
-            <Route
-                path="/smds"
-                element={
-                    <ProtectedRoute roles={["admin", "staff"]}>
-                        <SmdListPage />
-                    </ProtectedRoute>
-                }
-            />
+      <Route
+        path="/admin-dashboard"
+        element={
+          <ProtectedRoute roles={["admin"]}>
+            <AdminLayout>
+              <AdminDashboard />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
 
-            <Route
-                path="/marketers"
-                element={
-                    <ProtectedRoute roles={["admin", "staff"]}>
-                        <MarketersListPage />
-                    </ProtectedRoute>
-                }
-            />
+      <Route
+        path="/staff-dashboard"
+        element={
+          <ProtectedRoute roles={["staff"]}>
+            <AdminLayout>
+              <StaffDashboard />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
 
-            <Route
-                path="/customers-list"
-                element={
-                    <ProtectedRoute roles={["admin", "staff"]}>
-                        <CustomerListPage />
-                    </ProtectedRoute>
-                }
-            />
+      <Route
+        path="/add-smd"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <AddSmdPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
 
-            <Route
-                path="/smds-sell"
-                element={
-                    <ProtectedRoute roles={["admin", "staff"]}>
-                        <SmdClosingFormPage />
-                    </ProtectedRoute>
-                }
-            />
+      <Route
+        path="/add-rent-record"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <AddRentPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
 
+      <Route
+        path="/add-marketer"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <MarketerPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
 
-            <Route
-                path="/closed-deals"
-                element={
-                    <ProtectedRoute roles={["admin", "staff"]}>
-                        <SmdClosedPage />
-                    </ProtectedRoute>
-                }
-            />
+      <Route
+        path="/add-customer"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <CustomerPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
 
-            <Route
-                path="/staff"
-                element={
-                    <ProtectedRoute roles={["admin"]}>
-                        <StaffListPage />
-                    </ProtectedRoute>
-                }
-            />
+      <Route
+        path="/add-rent-payout"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <RentPayoutPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
 
-            <Route
-                path="/rent-payouts"
-                element={
-                    <ProtectedRoute roles={["admin", "staff"]}>
-                        <PayoutPage />
-                    </ProtectedRoute>
-                }
-            />
+      <Route
+        path="/smds"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <SmdListPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
 
-            <Route path="*" element={<div>Page Not Found</div>} />
-        </Routes>
-    );
+      <Route
+        path="/marketers"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <MarketersListPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/customers-list"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <CustomerListPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/smds-sell"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <SmdClosingFormPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/closed-deals"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <SmdClosedPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/staff"
+        element={
+          <ProtectedRoute roles={["admin"]}>
+            <AdminLayout>
+              <StaffListPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/rent-payouts"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <PayoutPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* ---------------- FALLBACK ---------------- */}
+      <Route
+        path="*"
+        element={
+          <PublicLayout>
+            <div className="p-8 text-center">Page Not Found</div>
+          </PublicLayout>
+        }
+      />
+
+    </Routes>
+  );
 };
 
 export default AppRouter;
