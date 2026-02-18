@@ -29,6 +29,15 @@ export const CustomerAPIs = {
             params: { q: query },
         });
         return response;
+    },
+
+    getCustomerById: async (customerId: string) => {
+        const response = await apiClient.get(`/customers/${customerId}`);
+        return response.data;
+    },
+    newAddCustomer: async (customerData: any) => {
+        const response =  await apiClient.post("/customers", customerData);
+        return response.data;
     }
 
 }

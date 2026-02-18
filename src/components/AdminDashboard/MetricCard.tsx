@@ -1,81 +1,88 @@
-import  { type FC, type ReactNode } from "react";
-
-export type MetricVariant =
-  | "blue"
-  | "success"
-  | "warning"
-  | "neutral"
-  | "danger";
-
+import React, { type FC } from "react";
+import { TrendingUp, TrendingDown } from "lucide-react";
 
 interface MetricCardProps {
   title: string;
   value: string | number;
-  icon: ReactNode;
-  variant?: MetricVariant;
+  icon: React.ReactNode;
+  variant: "blue" | "success" | "warning" | "danger";
+  trend?: number;
+  change?: string;
 }
 
-const MetricCard: FC<MetricCardProps> = ({
+export const MetricCard: FC<MetricCardProps> = ({
   title,
   value,
   icon,
-  variant = "blue",
+  variant,
+  trend,
+  change,
 }) => {
-  const variantStyles: Record<
-  MetricVariant,
-  {
-    accentColor: string;
-    iconColor: string;
-    bgColor: string;
-  }
-> = {
-  blue: {
-    accentColor: "border-blue-600",
-    iconColor: "text-blue-600",
-    bgColor: "bg-blue-50",
-  },
-  success: {
-    accentColor: "border-green-600",
-    iconColor: "text-green-600",
-    bgColor: "bg-green-50",
-  },
-  warning: {
-    accentColor: "border-orange-600",
-    iconColor: "text-orange-600",
-    bgColor: "bg-orange-50",
-  },
-  neutral: {
-    accentColor: "border-gray-400",
-    iconColor: "text-gray-500",
-    bgColor: "bg-gray-100",
-  },
-  danger: {
-    accentColor: "border-red-600",
-    iconColor: "text-red-600",
-    bgColor: "bg-red-50",
-  },
-};
+  const variants = {
+    blue: "from-blue-50 to-blue-50 border-blue-200 text-blue-700 bg-blue-500/10",
+    success: "from-emerald-50 to-emerald-50 border-emerald-200 text-emerald-700 bg-emerald-500/10",
+    warning: "from-amber-50 to-amber-50 border-amber-200 text-amber-700 bg-amber-500/10",
+    danger: "from-red-50 to-red-50 border-red-200 text-red-700 bg-red-500/10",
+  };
 
-  const styles = variantStyles[variant];
+  const iconColor = {
+    blue: "text-blue-600",
+    success: "text-emerald-600",
+    warning: "text-amber-600",
+    danger: "text-red-600",
+  };
+
+  const trendColor = trend && trend >= 0 ? "text-emerald-600" : "text-red-600";
+  const TrendIcon = trend && trend >= 0 ? TrendingUp : TrendingDown;
 
   return (
     <div
-      className={`bg-white p-6 rounded-xl shadow-md border-l-4 ${styles.accentColor}
-                  transition-all duration-300 hover:shadow-lg hover:scale-[1.02]
-                  flex items-center gap-4`}
+      className={`relative overflow-hidden rounded-xl border ${variants[variant]} p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-default`}
+      style={{
+        animation: "fadeInUp 0.6s ease-out forwards",
+      }}
     >
-      <div className={`p-3 rounded-lg ${styles.bgColor} ${styles.iconColor}`}>
-        {icon}
+      {/* Background accent */}
+      <div className="absolute top-0 right-0 w-32 h-32 opacity-5 pointer-events-none" />
+
+      <div className="relative z-10">
+        {/* Header with icon */}
+        <div className="flex items-start justify-between mb-4">
+          <div className={`p-3 rounded-lg ${iconColor[variant]} opacity-20`}>
+            <div className={`${iconColor[variant]}`}>{icon}</div>
+          </div>
+          {trend !== undefined && (
+            <div className={`flex items-center gap-1 text-xs font-semibold ${trendColor}`}>
+              <TrendIcon size={14} />
+              <span>{Math.abs(trend)}%</span>
+            </div>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-slate-600">{title}</p>
+          <p className="text-3xl font-bold text-slate-900 tracking-tight">{value}</p>
+        </div>
+
+        {/* Change indicator */}
+        {change && (
+          <p className="text-xs text-slate-500 mt-3 font-light">{change}</p>
+        )}
       </div>
 
-      <div>
-        <p className="text-gray-500 text-sm font-medium">{title}</p>
-        <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
-          {value}
-        </h2>
-      </div>
+      <style>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 };
-
-export default MetricCard;

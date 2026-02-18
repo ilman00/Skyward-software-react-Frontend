@@ -125,7 +125,7 @@ const Sidebar: FC = () => {
               <Home size={24} className="text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white tracking-tight">Skyward</h1>
+              <h1 className="text-xl font-bold text-white tracking-tight">Skyward Vision</h1>
               <p className="text-xs text-blue-200">Admin Panel</p>
             </div>
           </div>

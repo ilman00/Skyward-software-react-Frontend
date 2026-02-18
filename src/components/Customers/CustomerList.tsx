@@ -5,6 +5,7 @@ import { type Customer } from "../../pages/Customers/CustomerListPage";
 interface Props {
   customers: Customer[];
   onDelete: (id: string) => void;
+  onRowClick: (id: string) => void;
   pagination: {
     current: number;
     total: number;
@@ -12,7 +13,7 @@ interface Props {
   };
 }
 
-const CustomerList: React.FC<Props> = ({ customers, onDelete, pagination }) => {
+const CustomerList: React.FC<Props> = ({ customers, onDelete, onRowClick, pagination }) => {
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-6">
       <header>
@@ -35,7 +36,11 @@ const CustomerList: React.FC<Props> = ({ customers, onDelete, pagination }) => {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {customers.map((c) => (
-                <tr key={c.customer_id} className="hover:bg-slate-50/50 transition-colors">
+                <tr
+                  key={c.customer_id}
+                  onClick={() => onRowClick(c.customer_id)}
+                  className="hover:bg-slate-50 cursor-pointer transition"
+                >
                   <td className="px-6 py-4">
                     <div className="flex flex-col">
                       <span className="font-bold text-slate-800">{c.full_name}</span>
@@ -54,14 +59,13 @@ const CustomerList: React.FC<Props> = ({ customers, onDelete, pagination }) => {
                   <td className="px-6 py-4">
                     <div className="flex flex-wrap gap-1.5 max-w-[220px]">
                       {c.smds?.map((smd) => (
-                        <span 
+                        <span
                           key={smd.smd_id}
                           title={`${smd.title} - ${smd.status}`}
-                          className={`inline-flex items-center gap-1 px-2 py-0.5 border rounded text-[10px] font-bold uppercase ${
-                            smd.status === 'active' 
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-100' 
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 border rounded text-[10px] font-bold uppercase ${smd.status === 'active'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
                             : 'bg-amber-50 text-amber-700 border-amber-100'
-                          }`}
+                            }`}
                         >
                           <Monitor size={10} /> {smd.smd_code}
                         </span>
@@ -71,10 +75,10 @@ const CustomerList: React.FC<Props> = ({ customers, onDelete, pagination }) => {
 
                   <td className="px-6 py-4 max-w-[200px]">
                     <div className="flex flex-col">
-                        <span className="text-sm text-slate-700 font-medium">{c.city}</span>
-                        <span className="text-xs text-slate-400 line-clamp-1 flex items-center gap-1">
-                            <MapPin size={12} /> {c.address}
-                        </span>
+                      <span className="text-sm text-slate-700 font-medium">{c.city}</span>
+                      <span className="text-xs text-slate-400 line-clamp-1 flex items-center gap-1">
+                        <MapPin size={12} /> {c.address}
+                      </span>
                     </div>
                   </td>
 
@@ -85,9 +89,11 @@ const CustomerList: React.FC<Props> = ({ customers, onDelete, pagination }) => {
                   </td>
 
                   <td className="px-6 py-4 text-right">
-                    <button 
-                      onClick={() => onDelete(c.customer_id)}
-                      className="p-2 text-slate-300 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(c.customer_id);
+                      }}
                     >
                       <Trash2 size={20} />
                     </button>
@@ -100,7 +106,7 @@ const CustomerList: React.FC<Props> = ({ customers, onDelete, pagination }) => {
 
         {/* Pagination Controls */}
         <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
-          <button 
+          <button
             disabled={pagination.current === 1}
             onClick={() => pagination.onPageChange(pagination.current - 1)}
             className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 disabled:opacity-50"
@@ -110,7 +116,7 @@ const CustomerList: React.FC<Props> = ({ customers, onDelete, pagination }) => {
           <span className="text-sm text-slate-500 font-medium">
             Page {pagination.current} of {pagination.total}
           </span>
-          <button 
+          <button
             disabled={pagination.current === pagination.total}
             onClick={() => pagination.onPageChange(pagination.current + 1)}
             className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 disabled:opacity-50"

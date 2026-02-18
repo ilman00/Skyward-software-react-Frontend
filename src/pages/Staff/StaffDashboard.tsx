@@ -1,30 +1,30 @@
 import { type FC } from "react";
 import { type ReactNode } from "react";
 import {
-   Users,
-    UserSquare,
-    UserCheck,
-    Layers,
-    Timer,
-    DollarSign,
-    FileWarning,
-    Eye,
-    PlusCircle,
-    CheckCircle2,
+  Users,
+  UserSquare,
+  UserCheck,
+  Layers,
+  Timer,
+  DollarSign,
+  FileWarning,
+  Eye,
+  PlusCircle,
+  CheckCircle2,
 } from "lucide-react";
 
-import MetricCard from "../../components/AdminDashboard/MetricCard";
-import AlertCard from "../../components/AdminDashboard/AlertCard";
+import { MetricCard } from "../../components/AdminDashboard/MetricCard";
+import { AlertCard } from "../../components/AdminDashboard/AlertCard";
 import ActionButton from "../../components/AdminDashboard/ActionButton";
 
 interface SectionHeaderProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 const SectionHeader: FC<SectionHeaderProps> = ({ children }) => (
-    <h1 className="text-2xl font-bold mb-6 text-gray-800">
-        {children}
-    </h1>
+  <h1 className="text-2xl font-bold mb-6 text-gray-800">
+    {children}
+  </h1>
 );
 
 const StaffDashboard: FC = () => {

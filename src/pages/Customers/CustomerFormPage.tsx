@@ -7,11 +7,13 @@ import { CustomerAPIs } from "../../services/CustomerAPIs";
 const CustomerFormPage: React.FC = () => {
   const navigate = useNavigate();
 
+  
+
   const handleCreateCustomer = async (data: CustomerFormData) => {
     try {
       // Using toast.promise to manage all UI feedback states
       await toast.promise(
-        CustomerAPIs.addCustomer(data),
+        CustomerAPIs.newAddCustomer(data),
         {
           loading: 'Creating customer account...',
           success: 'Customer added successfully!',

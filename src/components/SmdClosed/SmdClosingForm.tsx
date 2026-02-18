@@ -16,12 +16,12 @@ interface CloseDealFormProps {
 const CloseDealForm: React.FC<CloseDealFormProps> = ({ onCloseDeal }) => {
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-  customer_id: "",
-  smd_id: "",
-  marketer_id: "",
-  sell_price: "",
-  monthly_rent: "",
-});
+    customer_id: "",
+    smd_id: "",
+    marketer_id: "",
+    sell_price: "",
+    monthly_rent: "",
+  });
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -54,8 +54,9 @@ const CloseDealForm: React.FC<CloseDealFormProps> = ({ onCloseDeal }) => {
             </label>
             <AsyncSelect<SelectOption>
               cacheOptions
+              defaultOptions // 👈 This tells React-Select to load the list immediately
               loadOptions={(inputValue) => dealService.searchCustomers(inputValue)}
-              placeholder="Search customer..."
+              placeholder="Select or search customer..."
               onChange={(opt) =>
                 setFormData({ ...formData, customer_id: opt?.value ?? "" })
               }
@@ -63,15 +64,16 @@ const CloseDealForm: React.FC<CloseDealFormProps> = ({ onCloseDeal }) => {
             />
           </div>
 
-          {/* SMD */}
+          {/* SMD CODE */}
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
               <Monitor size={14} /> SMD Code
             </label>
             <AsyncSelect<SelectOption>
               cacheOptions
-              loadOptions={dealService.searchSmds}
-              placeholder="Search SMD..."
+              defaultOptions // 👈 Loads SMD list on mount
+              loadOptions={(inputValue) => dealService.searchSmds(inputValue)}
+              placeholder="Select or search SMD..."
               onChange={(opt) =>
                 setFormData({ ...formData, smd_id: opt?.value ?? "" })
               }
@@ -87,6 +89,7 @@ const CloseDealForm: React.FC<CloseDealFormProps> = ({ onCloseDeal }) => {
             <AsyncSelect<SelectOption>
               isClearable
               cacheOptions
+              defaultOptions
               loadOptions={dealService.searchMarketers}
               placeholder="Search marketer..."
               onChange={(opt) =>

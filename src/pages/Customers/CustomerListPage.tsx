@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CustomerList from "../../components/Customers/CustomerList";
-import { CustomerAPIs as customerService} from "../../services/CustomerAPIs";
+import { CustomerAPIs as customerService } from "../../services/CustomerAPIs";
 import { toast } from "react-hot-toast";
+import CustomerDetailModal from "../../components/Customers/CustomerDetailModel";
 
 /* ALIGNED TYPES */
 export interface SMD {
@@ -30,6 +31,8 @@ const CustomerPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchCustomers = async (page: number) => {
     try {
@@ -37,7 +40,7 @@ const CustomerPage: React.FC = () => {
       const response = await customerService.getCustomers(page);
       console.log(response);
       // Accessing the 'data' and 'meta' from your specific JSON structure
-      setCustomers(response.data); 
+      setCustomers(response.data);
       setTotalPages(response.meta.totalPages);
       setCurrentPage(response.meta.page);
     } catch (error) {
@@ -48,9 +51,25 @@ const CustomerPage: React.FC = () => {
     }
   };
 
+  const handleRowClick = async (customerId: string) => {
+    try {
+      const res = await customerService.getCustomerById(customerId);
+
+      console.log("API Response:", res);
+
+      setSelectedCustomer(res.data); // ✅ FIX
+
+      setIsModalOpen(true);
+    } catch (error) {
+      toast.error("Failed to load customer details");
+      console.error(error);
+    }
+  };
+
+
   const handleDelete = async (id: string) => {
     if (!window.confirm("Confirm deletion of this customer?")) return;
-    
+
     const tid = toast.loading("Deleting...");
     try {
       await customerService.deleteCustomer(id);
@@ -73,15 +92,28 @@ const CustomerPage: React.FC = () => {
           <p className="text-slate-500 animate-pulse">Loading Directory...</p>
         </div>
       ) : (
-        <CustomerList 
-          customers={customers} 
-          onDelete={handleDelete}
-          pagination={{
-            current: currentPage,
-            total: totalPages,
-            onPageChange: (p) => fetchCustomers(p)
-          }}
-        />
+        <>
+          <CustomerList
+            customers={customers}
+            onDelete={handleDelete}
+            onRowClick={handleRowClick}
+            pagination={{
+              current: currentPage,
+              total: totalPages,
+              onPageChange: (p) => fetchCustomers(p)
+            }}
+          />
+
+          {isModalOpen && (
+            <CustomerDetailModal
+              customer={selectedCustomer}
+              onClose={() => {
+                setIsModalOpen(false);
+                setSelectedCustomer(null);
+              }}
+            />
+          )}
+        </>
       )}
     </div>
   );
