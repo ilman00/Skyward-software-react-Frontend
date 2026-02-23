@@ -15,7 +15,7 @@ interface Props {
 
 const CustomerList: React.FC<Props> = ({ customers, onDelete, onRowClick, pagination }) => {
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-6">
+    <div className="p-8 w-full mx-auto space-y-6">
       <header>
         <h1 className="text-3xl font-bold text-slate-900">Customer Directory</h1>
         <p className="text-slate-500 mt-1">Real-time overview of clients and assigned SMDs</p>

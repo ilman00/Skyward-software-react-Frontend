@@ -25,8 +25,10 @@ const LoginPage = () => {
         navigate("/admin-dashboard", { replace: true });
       } else if (user.role === "staff") {
         navigate("/staff-dashboard", { replace: true });
+      } else if (user.role === "marketer") {
+        navigate("/marketer-dashboard", { replace: true });
       } else {
-        navigate("/", { replace: true });
+        navigate("/unauthorized", { replace: true });
       }
     } catch (err: any) {
       setError(err?.message || "Invalid credentials. Please try again.");
@@ -37,19 +39,19 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-white font-sans">
-      
+
       {/* Left Side: Branding (Matches Register Page) */}
       <div className="hidden lg:flex flex-col justify-center items-center bg-slate-900 p-12 text-white relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
           <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]"></div>
         </div>
-        
+
         <div className="relative z-10 max-w-md">
           <div className="bg-blue-600 w-12 h-12 rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/30">
             <ShieldCheck size={28} />
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight mb-4">
-            Welcome back to <br /> 
+            Welcome back to <br />
             <span className="text-blue-500">SMD Manager.</span>
           </h1>
           <p className="text-slate-400 text-lg leading-relaxed">

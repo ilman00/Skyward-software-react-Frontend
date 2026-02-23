@@ -32,23 +32,34 @@ const CustomerPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  // 1. Add search state
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // 2. Update fetch function to accept search
+
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchCustomers = async (page: number) => {
+  const fetchCustomers = async (page: number, search: string = "") => {
     try {
       setLoading(true);
-      const response = await customerService.getCustomers(page);
-      console.log(response);
-      // Accessing the 'data' and 'meta' from your specific JSON structure
+      // Assuming your API service is updated to accept a search param
+      const response = await customerService.getCustomers(page, search);
+
       setCustomers(response.data);
       setTotalPages(response.meta.totalPages);
       setCurrentPage(response.meta.page);
     } catch (error) {
       toast.error("Failed to fetch customer data");
-      console.error(error);
     } finally {
       setLoading(false);
     }
+  };
+
+  // 3. Handle search submission
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    fetchCustomers(1, searchTerm); // Reset to page 1 on search
   };
 
   const handleRowClick = async (customerId: string) => {
@@ -85,7 +96,36 @@ const CustomerPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 w-full px-2 sm:px-4 lg:px-6 py-8">
+
+      <div className="p-4 bg-white border-b flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-xl font-bold text-slate-800">Customer Directory</h1>
+
+        <form onSubmit={handleSearch} className="flex w-full max-w-md gap-2">
+          <input
+            type="text"
+            placeholder="Search name, email, phone, CNIC or SMD ID..."
+            className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Search
+          </button>
+          {searchTerm && (
+            <button
+              type="button"
+              onClick={() => { setSearchTerm(""); fetchCustomers(1, ""); }}
+              className="text-slate-500 hover:text-slate-700 text-sm"
+            >
+              Clear
+            </button>
+          )}
+        </form>
+      </div>
       {loading ? (
         <div className="flex flex-col items-center justify-center h-64 space-y-4">
           <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -93,16 +133,19 @@ const CustomerPage: React.FC = () => {
         </div>
       ) : (
         <>
-          <CustomerList
-            customers={customers}
-            onDelete={handleDelete}
-            onRowClick={handleRowClick}
-            pagination={{
-              current: currentPage,
-              total: totalPages,
-              onPageChange: (p) => fetchCustomers(p)
-            }}
-          />
+          <div className="w-full max-w-[1600px] mx-auto">
+            <CustomerList
+              customers={customers}
+              onDelete={handleDelete}
+              onRowClick={handleRowClick}
+              pagination={{
+                current: currentPage,
+                total: totalPages,
+                onPageChange: (p) => fetchCustomers(p)
+              }}
+            />
+          </div>
+
 
           {isModalOpen && (
             <CustomerDetailModal

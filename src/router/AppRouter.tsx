@@ -25,8 +25,15 @@ import SmdClosedPage from "../pages/SmdClosed/SmdClosedPage";
 import StaffListPage from "../pages/Staff/StaffListPage";
 import PayoutPage from "../pages/Payout/PayoutPage";
 import SmdClosingFormPage from "../pages/SmdClosed/SmdClosingFormPage";
+import Dashboard from "../pages/Marketers/Dashboard";
+import Customers from "../pages/Marketers/Customers";
+import Earnings from "../pages/Marketers/Earnings";
+import MarketerLayout from "../layouts/MarketerLayout";
+
 
 const AppRouter = () => {
+
+
   return (
     <Routes>
 
@@ -244,6 +251,38 @@ const AppRouter = () => {
         }
       />
 
+<Route
+  path="/marketer-dashboard"
+  element={
+    <ProtectedRoute roles={["marketer"]}>
+      <MarketerLayout>
+        <Dashboard />
+      </MarketerLayout>
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/marketer/customers"
+  element={
+    <ProtectedRoute roles={["marketer"]}>
+      <MarketerLayout>
+        <Customers />
+      </MarketerLayout>
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/marketer/earnings"
+  element={
+    <ProtectedRoute roles={["marketer"]}>
+      <MarketerLayout>
+        <Earnings />
+      </MarketerLayout>
+    </ProtectedRoute>
+  }
+/>
     </Routes>
   );
 };

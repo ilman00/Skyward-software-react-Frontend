@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import apiClient, { setAccessToken } from "../api/client";
 import AuthContext from "./AuthContext";
 import type { User } from "./types";
+import FullPageLoader from "../components/FullPageLoader";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
@@ -60,7 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 loading,
             }}
         >
-            {children}
+           {loading ? <FullPageLoader /> : children}
         </AuthContext.Provider>
     );
 };

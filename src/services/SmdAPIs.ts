@@ -38,6 +38,11 @@ export const SmdAPIs = {
     return response.data;
   },
 
+  getsmdByCustomer: async (customer_id: string) => {
+    const response = await apiClient.get(`/smds/customer/${customer_id}`);
+    return response.data;
+  },
+
 
   deleteSmd: async (smd_id: string) => {
     const response = await apiClient.delete(`/smds/${smd_id}`);

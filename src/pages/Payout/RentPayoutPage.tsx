@@ -22,7 +22,7 @@ const RentPayoutPage: React.FC = () => {
   const getSmdByCustomer = async (customerId: string) => {
     try {
       setIsLoadingSmds(true);
-      const res = await SmdAPIs.getSmd(customerId);
+      const res = await SmdAPIs.getsmdByCustomer(customerId);
       setSmds(res.data);
     } catch (error) {
       toast.error("Failed to load SMDs");
