@@ -251,38 +251,38 @@ const AppRouter = () => {
         }
       />
 
-<Route
-  path="/marketer-dashboard"
-  element={
-    <ProtectedRoute roles={["marketer"]}>
-      <MarketerLayout>
-        <Dashboard />
-      </MarketerLayout>
-    </ProtectedRoute>
-  }
-/>
+      <Route
+        path="/marketer-dashboard"
+        element={
+          <ProtectedRoute roles={["marketer"]}>
+            <MarketerLayout>
+              <Dashboard />
+            </MarketerLayout>
+          </ProtectedRoute>
+        }
+      />
 
-<Route
-  path="/marketer/customers"
-  element={
-    <ProtectedRoute roles={["marketer"]}>
-      <MarketerLayout>
-        <Customers />
-      </MarketerLayout>
-    </ProtectedRoute>
-  }
-/>
+      <Route
+        path="/marketer/customers"
+        element={
+          <ProtectedRoute roles={["marketer"]}>
+            <MarketerLayout>
+              <Customers />
+            </MarketerLayout>
+          </ProtectedRoute>
+        }
+      />
 
-<Route
-  path="/marketer/earnings"
-  element={
-    <ProtectedRoute roles={["marketer"]}>
-      <MarketerLayout>
-        <Earnings />
-      </MarketerLayout>
-    </ProtectedRoute>
-  }
-/>
+      <Route
+        path="/marketer/earnings"
+        element={
+          <ProtectedRoute roles={["marketer"]}>
+            <MarketerLayout>
+              <Earnings />
+            </MarketerLayout>
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };

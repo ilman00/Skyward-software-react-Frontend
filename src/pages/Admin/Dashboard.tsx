@@ -4,19 +4,20 @@ import {
   UserSquare,
   UserCheck,
   Layers,
-  Megaphone,
   Timer,
   DollarSign,
   AlertTriangle,
   FileWarning,
-  UserX,
   Bell,
   Settings,
   CheckCircle2,
   Clock,
+  PlusCircle,
+  Eye,
 } from "lucide-react";
 import { MetricCard } from "../../components/AdminDashboard/MetricCard";
 import { AlertCard } from "../../components/AdminDashboard/AlertCard";
+import ActionButton from "../../components/AdminDashboard/ActionButton";
 
 /**
  * SectionHeader - Professional section divider
@@ -35,18 +36,7 @@ const SectionHeader: FC<{ title: string; subtitle?: string }> = ({
 
 
 
-/**
- * StatGrid - Responsive grid for stats
- */
-const StatGrid: FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-    {children}
-  </div>
-);
 
-/**
- * PageHeader - Main dashboard header with actions
- */
 const PageHeader: FC = () => (
   <div className="mb-8 flex items-center justify-between">
     <div>
@@ -68,9 +58,6 @@ const PageHeader: FC = () => (
   </div>
 );
 
-/**
- * Main Dashboard Component
- */
 const AdminDashboard: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -99,8 +86,98 @@ const AdminDashboard: FC = () => {
       <PageHeader />
 
       {/* Primary KPIs */}
+
+
       <section>
-        <StatGrid>
+        <h1 className="text-2xl font-bold mb-6 text-gray-800">
+          My Actions
+        </h1>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+          <ActionButton
+            href="/add-customer"
+            label="Add Customer"
+            icon={<PlusCircle size={20} />}
+          />
+
+          <ActionButton
+            href="/add-smd"
+            label="Add SMD"
+            icon={<PlusCircle size={20} />}
+          />
+
+          <ActionButton
+            href="/add-marketer"
+            label="Add Marketer"
+            icon={<PlusCircle size={20} />}
+          />
+
+          <ActionButton
+            href="/add-rent-payout"
+            label="Add Rent Payout"
+            icon={<PlusCircle size={20} />}
+          />
+
+          <ActionButton
+            href="/my-activity"
+            label="My Activity"
+            icon={<Eye size={20} />}
+          />
+        </div>
+      </section>
+
+      <section>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+
+          <ActionButton
+            href="/staff"
+            label="All Staff"
+            icon={<Users size={18} className="text-gray-600" />}
+            variant="neutral"
+          />
+
+          <ActionButton
+            href="/marketers"
+            label="All Marketers"
+            icon={<UserSquare size={18} className="text-gray-600" />}
+            variant="neutral"
+          />
+
+          <ActionButton
+            href="/customers-list"
+            label="All Customers"
+            icon={<Users size={18} className="text-gray-600" />}
+            variant="neutral"
+          />
+
+          <ActionButton
+            href="/closed-deals"
+            label="Closed Deals"
+            icon={<CheckCircle2 size={18} className="text-gray-600" />}
+            variant="neutral"
+          />
+
+          <ActionButton
+            href="/smds"
+            label="All SMDs"
+            icon={<UserCheck size={18} className="text-gray-600" />}
+            variant="neutral"
+          />
+
+          <ActionButton
+            href="/rent-payouts"
+            label="Rent Payouts"
+            icon={<DollarSign size={18} className="text-gray-600" />}
+            variant="neutral"
+          />
+        </div>
+      </section>
+      <section className="mb-8">
+        <h1 className="text-2xl font-bold mb-6 text-gray-800">
+          Total Overview
+        </h1>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <MetricCard
             title="Total Customers"
             value="1,240"
@@ -129,21 +206,6 @@ const AdminDashboard: FC = () => {
           />
 
           <MetricCard
-            title="Active Campaigns"
-            value="156"
-            icon={<Megaphone size={24} />}
-            variant="success"
-            trend={22}
-            change="↑ 28 campaigns live"
-          />
-        </StatGrid>
-      </section>
-
-      {/* Secondary Metrics */}
-      <section>
-        <SectionHeader title="Financial & Operations" subtitle="Budget and resource allocation overview" />
-        <StatGrid>
-          <MetricCard
             title="Monthly Rent Liability"
             value="PKR 2.5M"
             icon={<DollarSign size={24} />}
@@ -168,17 +230,9 @@ const AdminDashboard: FC = () => {
             change="Action required"
           />
 
-          <MetricCard
-            title="Inactive Resources"
-            value="8"
-            icon={<UserX size={24} />}
-            variant="danger"
-            change="Need attention"
-          />
-        </StatGrid>
+        </div>
       </section>
 
-      {/* Alerts Section */}
       <section>
         <SectionHeader
           title="Critical Alerts"
@@ -191,7 +245,7 @@ const AdminDashboard: FC = () => {
             description="5 customers have overdue rent payments totaling PKR 850,000. Immediate collection action required."
             icon={<DollarSign size={20} />}
             severity="danger"
-            action={{ label: "View Details", onClick: () => {} }}
+            action={{ label: "View Details", onClick: () => { } }}
             timestamp="2 hours ago"
           />
 
@@ -200,7 +254,7 @@ const AdminDashboard: FC = () => {
             description="8 advertisement contracts will expire within 7 days. Review and renewal needed."
             icon={<FileWarning size={20} />}
             severity="warning"
-            action={{ label: "Manage Contracts", onClick: () => {} }}
+            action={{ label: "Manage Contracts", onClick: () => { } }}
             timestamp="4 hours ago"
           />
 
@@ -209,7 +263,7 @@ const AdminDashboard: FC = () => {
             description="3 marketers and 2 SMDs are waiting for admin approval to activate their accounts."
             icon={<AlertTriangle size={20} />}
             severity="danger"
-            action={{ label: "Review Requests", onClick: () => {} }}
+            action={{ label: "Review Requests", onClick: () => { } }}
             timestamp="1 day ago"
           />
 

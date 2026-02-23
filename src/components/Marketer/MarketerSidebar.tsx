@@ -7,7 +7,6 @@ import {
   LogOut,
   Menu,
   X,
-  TrendingUp,
   Home,
 } from "lucide-react";
 import useAuth from "../../auth/useAuth"; // Ensure this path is correct
