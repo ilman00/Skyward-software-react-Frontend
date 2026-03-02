@@ -29,6 +29,9 @@ import Dashboard from "../pages/Marketers/Dashboard";
 import Customers from "../pages/Marketers/Customers";
 import Earnings from "../pages/Marketers/Earnings";
 import MarketerLayout from "../layouts/MarketerLayout";
+import ClientManagementPage from "../pages/user/ClientManagementPage";
+import PDFPage from "../pages/contractPDF/PDFPage";
+import ContractPage from "../pages/contractPDF/Contract";
 
 
 const AppRouter = () => {
@@ -81,6 +84,15 @@ const AppRouter = () => {
             <div className="p-8 text-center text-red-600 font-semibold">
               Unauthorized Access
             </div>
+          </PublicLayout>
+        }
+      />
+
+      <Route
+        path="/pdf"
+        element={
+          <PublicLayout>
+            <PDFPage />
           </PublicLayout>
         }
       />
@@ -283,7 +295,32 @@ const AppRouter = () => {
           </ProtectedRoute>
         }
       />
+
+    <Route 
+      path="/users"
+      element={
+        <ProtectedRoute roles={["admin", "staff"]}>
+          <AdminLayout>
+            <ClientManagementPage />
+          </AdminLayout>
+        </ProtectedRoute>
+      }
+    />
+
+    <Route
+      path="/my-contracts"
+      element={
+        <ProtectedRoute roles={["admin", "staff"]}>
+          <AdminLayout>
+            <ContractPage />
+          </AdminLayout>
+        </ProtectedRoute>
+      }
+    />
+
+
     </Routes>
+
   );
 };
 

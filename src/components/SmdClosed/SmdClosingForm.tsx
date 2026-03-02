@@ -101,6 +101,8 @@ const CloseDealForm: React.FC<CloseDealFormProps> = ({ onCloseDeal }) => {
                   loadOptions={(inputValue) => dealService.searchCustomers(inputValue)}
                   placeholder="Search by name or company..."
                   onChange={(opt) => setFormData({ ...formData, customer_id: opt?.value ?? "" })}
+                  menuPortalTarget={document.body}
+                  menuPosition="fixed"
                 />
               </div>
             </div>

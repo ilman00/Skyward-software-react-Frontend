@@ -51,7 +51,8 @@ const StaffList: React.FC<StaffListProps> = ({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({
     full_name: "",
-    role: "staff" as UserRole
+    role_name: "staff" as UserRole,
+    status: "active" as "active" | "suspended"
   });
 
   /* SEARCH LOGIC */
@@ -70,9 +71,12 @@ const StaffList: React.FC<StaffListProps> = ({
 
   const handleStartEdit = (s: StaffMember) => {
     setEditingId(s.user_id);
-    setEditForm({ full_name: s.full_name, role: s.role_name });
+    setEditForm({
+      full_name: s.full_name,
+      role_name: s.role_name,
+      status: s.status === "deleted" ? "suspended" : s.status // prevents editing 'deleted' if desired
+    });
   };
-
   const handleSave = (id: string) => {
     onUpdate(id, editForm);
     setEditingId(null);
@@ -190,19 +194,17 @@ const StaffList: React.FC<StaffListProps> = ({
                         <td className="px-6 py-4">
                           {isEditing ? (
                             <select
-                              value={editForm.role}
+                              value={editForm.role_name} // Updated key
                               onChange={(e) =>
                                 setEditForm({
                                   ...editForm,
-                                  role: e.target.value as UserRole
+                                  role_name: e.target.value as UserRole // Updated key
                                 })
                               }
                               className="w-40 border border-blue-300 rounded-lg px-3 py-2 text-sm outline-none ring-4 ring-blue-50 bg-white"
                             >
                               <option value="admin">Admin</option>
                               <option value="staff">Staff</option>
-                              <option value="marketer">Marketer</option>
-                              <option value="customer">Customer</option>
                             </select>
                           ) : (
                             <div
@@ -223,15 +225,26 @@ const StaffList: React.FC<StaffListProps> = ({
                         </td>
 
                         <td className="px-6 py-4">
-                          <div className="flex items-center gap-2 text-sm">
-                            {(() => {
-                              const { color, Icon } = statusMap[s.status] || { color: "slate-500", Icon: Mail };
-                              return <Icon size={14} className={`text-${color}`} />;
-                            })()}
-                            <span className={`text-${statusMap[s.status]?.color || "slate-500"}`}>
-                              {s.status}
-                            </span>
-                          </div>
+                          {isEditing ? (
+                            <select
+                              value={editForm.status}
+                              onChange={(e) => setEditForm({ ...editForm, status: e.target.value as any })}
+                              className="border border-blue-300 rounded-lg px-2 py-1 text-sm outline-none ring-4 ring-blue-50"
+                            >
+                              <option value="active">Active</option>
+                              <option value="suspended">Suspended</option>
+                            </select>
+                          ) : (
+                            <div className="flex items-center gap-2 text-sm">
+                              {(() => {
+                                const { color, Icon } = statusMap[s.status] || { color: "slate-500", Icon: Mail };
+                                return <Icon size={14} className={`text-${color}`} />;
+                              })()}
+                              <span className={`text-${statusMap[s.status]?.color || "slate-500"}`}>
+                                {s.status}
+                              </span>
+                            </div>
+                          )}
                         </td>
                         {/* Actions */}
                         <td className="px-6 py-4 text-right">

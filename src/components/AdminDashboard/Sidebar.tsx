@@ -15,6 +15,8 @@ import {
   HandCoins,
   Home,
   ChevronDown,
+  Handshake,
+  FileArchive
 } from "lucide-react";
 import useAuth from "../../auth/useAuth";
 
@@ -159,6 +161,7 @@ const Sidebar: FC = () => {
               <NavItem to="/staff" icon={<UserCheck size={18} />} label="Staff" />
               <NavItem to="/smds" icon={<CheckCircle2 size={18} />} label="SMDs" />
               <NavItem to="/closed-deals" icon={<DollarSign size={18} />} label="Closed Deals" />
+              <NavItem to="/users" icon={<UserCheck size={18} />} label="External Users" />
             </div>
           </NavSection>
 
@@ -172,6 +175,18 @@ const Sidebar: FC = () => {
             <div className="space-y-1 ml-2">
               <NavItem to="/add-rent-payout" icon={<Home size={18} />} label="Add Rent" />
               <NavItem to="/rent-payouts" icon={<HandCoins size={18} />} label="Payouts" />
+            </div>
+          </NavSection>
+
+          <NavSection
+            title="Contract"
+            icon={<Handshake size={16} />}
+            id="contract"
+            collapsible={true}
+          >
+            <div className="space-y-1 ml-2">
+              <NavItem to="/pdf" icon={<Handshake size={18} />} label="View Sample PDF" />
+              <NavItem to="/my-contracts" icon={<FileArchive size={18} />} label="My Contracts" />
             </div>
           </NavSection>
 

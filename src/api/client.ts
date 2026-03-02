@@ -53,13 +53,29 @@ apiClient.interceptors.response.use(
     if (
       originalRequest?.url?.includes("/auth/refresh") ||
       originalRequest?.url?.includes("/auth/login") ||
-      originalRequest?.url?.includes("/auth/register") || 
+      originalRequest?.url?.includes("/auth/register") ||
       originalRequest?.url?.includes("/auth/verify-otp") ||
       originalRequest?.url?.includes("/auth/forgot-password") ||
       originalRequest?.url?.includes("/auth/reset-password") ||
       originalRequest?.url?.includes("/auth/logout")
     ) {
       return Promise.reject(error);
+    }
+
+    if (error.response.status === 403) {
+      const code = (error.response.data as any)?.code;
+
+      if (code === "ACCOUNT_SUSPENDED" || code === "ACCOUNT_DISABLED") {
+        setAccessToken(null);
+
+        // Optional: clear localStorage/sessionStorage
+        localStorage.clear();
+
+        // Redirect to login
+        window.location.href = "/login";
+
+        return Promise.reject(error);
+      }
     }
 
     if (error.response.status === 401 && !originalRequest._retry) {

@@ -30,24 +30,18 @@ const StaffListPage: React.FC = () => {
     loadUsers();
   }, []);
 
-  const updateUser = async (
-    id: string,
-    payload: Partial<StaffMember>
-  ) => {
+  const updateUser = async (id: string, payload: any) => {
     const toastId = toast.loading("Updating user...");
     try {
+      // payload now contains { full_name, role_name, status }
       await UserAPI.updateUser(id, payload);
+
       setUsers((prev) =>
-        prev.map((u) =>
-          u.user_id === id ? { ...u, ...payload } : u
-        )
+        prev.map((u) => (u.user_id === id ? { ...u, ...payload } : u))
       );
       toast.success("User updated", { id: toastId });
     } catch (err: any) {
-      toast.error(
-        err?.response?.data?.message || "Update failed",
-        { id: toastId }
-      );
+      toast.error(err?.response?.data?.message || "Update failed", { id: toastId });
     }
   };
 
