@@ -31,14 +31,14 @@ const CloseDealForm: React.FC<CloseDealFormProps> = ({ onCloseDeal }) => {
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     customer_id: "",
-    smds: [{ smd_id: "", sell_price: "", monthly_rent: "", share_percentage: "" }],
+    smds: [{ smd_id: "", sell_price: "", amount_paid: "",monthly_rent: "", share_percentage: "" }],
   });
 
   /* HELPERS */
   const addSmdRow = () => {
     setFormData((prev) => ({
       ...prev,
-      smds: [...prev.smds, { smd_id: "", sell_price: "", monthly_rent: "", share_percentage: "" }],
+      smds: [...prev.smds, { smd_id: "", sell_price: "", amount_paid: "", monthly_rent: "", share_percentage: "" }],
     }));
   };
 
@@ -66,6 +66,7 @@ const CloseDealForm: React.FC<CloseDealFormProps> = ({ onCloseDeal }) => {
           sell_price: Number(s.sell_price),
           monthly_rent: Number(s.monthly_rent),
           share_percentage: Number(s.share_percentage),
+          amount_paid: Number(s.amount_paid),
         })),
       });
     } finally {
@@ -170,6 +171,21 @@ const CloseDealForm: React.FC<CloseDealFormProps> = ({ onCloseDeal }) => {
                           required
                         />
                       </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-sm font-semibold text-gray-700 ml-1">Amount Paid</label>
+                      <div className="relative">
+                        <DollarSign size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                        <input
+                          type="number"
+                          placeholder="0.00"
+                          value={smd.amount_paid}
+                          onChange={(e) => updateSmdField(index, "amount_paid", e.target.value)}
+                          className={`${inputClass} pl-10`}
+                          required
+                        />
+                      </div>  
                     </div>
 
                     <div className="space-y-1.5">

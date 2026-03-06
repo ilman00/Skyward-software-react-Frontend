@@ -18,6 +18,8 @@ const ProtectedRoute = ({ children, roles }: Props) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
   console.log("User role:", user.role);
+  console.log("User:", user);
+
 
   if (roles && !roles.includes(user.role)) {
     return <Navigate to={ROLE_HOME[user.role]} replace />;

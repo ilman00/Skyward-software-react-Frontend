@@ -95,3 +95,17 @@ export const dealService = {
     return response.data;
   },
 };
+
+
+export const BalancePaymentAPIs = {
+  getRemainingBalance: async (customer_id: string, smd_id: string) => {
+    const response = await apiClient.get(`/closing-balance`, {
+      params: { customer_id, smd_id }, // ✅ query params
+    });
+    return response.data;
+  },
+  createPayment: async (payload: any) => {
+    const response = await apiClient.post("/record-payment", payload);
+    return response.data;
+  },
+};

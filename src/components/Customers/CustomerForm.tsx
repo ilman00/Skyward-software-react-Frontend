@@ -14,8 +14,8 @@ export interface HeirData {
 
 export interface CustomerFormData {
   full_name: string;
+  father_name: string;
   email: string;
-  password: string;
   contact_number?: string;
   cnic?: string;
   address?: string;
@@ -49,8 +49,8 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
 
   const [form, setForm] = useState<CustomerFormData>({
     full_name: initialData?.full_name || "",
+    father_name: initialData?.father_name || "",
     email: initialData?.email || "",
-    password: "",
     contact_number: initialData?.contact_number || "",
     cnic: initialData?.cnic || "",
     address: initialData?.address || "",
@@ -161,6 +161,16 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
                   required
                 />
               </div>
+              <div className="space-y-1.5">
+                <label className="text-sm font-semibold text-gray-700 ml-1">Father Name *</label>
+                <input
+                  name="father_name"
+                  value={form.father_name}
+                  onChange={handleChange}
+                  className={`${inputClass} focus:ring-2 focus:ring-blue-500/20`}
+                  required
+                />
+              </div>
 
               <div className="space-y-1.5">
                 <label className="text-sm font-semibold text-gray-700 ml-1">Email Address *</label>
@@ -174,7 +184,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
                 />
               </div>
 
-              <div className="md:col-span-2 space-y-1.5">
+              {/* <div className="  space-y-1.5">
                 <label className="text-sm font-semibold text-gray-700 ml-1">Password *</label>
                 <input
                   type="password"
@@ -184,7 +194,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
                   className={`${inputClass} focus:ring-2 focus:ring-blue-500/20`}
                   required
                 />
-              </div>
+              </div> */}  
 
               <div className="space-y-1.5">
                 <label className="text-sm font-semibold text-gray-700 ml-1">Contact Number</label>

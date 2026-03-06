@@ -175,6 +175,7 @@ const Sidebar: FC = () => {
             <div className="space-y-1 ml-2">
               <NavItem to="/add-rent-payout" icon={<Home size={18} />} label="Add Rent" />
               <NavItem to="/rent-payouts" icon={<HandCoins size={18} />} label="Payouts" />
+              <NavItem to="/smd-payments" icon={<HandCoins size={18} />} label="SMD Payments" />
             </div>
           </NavSection>
 
@@ -185,7 +186,7 @@ const Sidebar: FC = () => {
             collapsible={true}
           >
             <div className="space-y-1 ml-2">
-              <NavItem to="/pdf" icon={<Handshake size={18} />} label="View Sample PDF" />
+              {/* <NavItem to="/pdf" icon={<Handshake size={18} />} label="View Sample PDF" /> */}
               <NavItem to="/my-contracts" icon={<FileArchive size={18} />} label="My Contracts" />
             </div>
           </NavSection>

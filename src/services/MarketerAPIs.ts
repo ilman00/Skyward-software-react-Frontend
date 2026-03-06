@@ -54,3 +54,11 @@ export const MarketerAPIs = {
     }
   },
 };
+
+export const MarketerDashboardAPIs = {
+  getSummary: async () => {
+    const response = await apiClient.get("/marketer/dashboard/summary");
+    return response.data;
+  },
+
+}

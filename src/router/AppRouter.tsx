@@ -32,6 +32,7 @@ import MarketerLayout from "../layouts/MarketerLayout";
 import ClientManagementPage from "../pages/user/ClientManagementPage";
 import PDFPage from "../pages/contractPDF/PDFPage";
 import ContractPage from "../pages/contractPDF/Contract";
+import SmdPaymentFormPage from "../pages/SmdPayments/smdPaymentsForm";
 
 
 const AppRouter = () => {
@@ -317,6 +318,18 @@ const AppRouter = () => {
         </ProtectedRoute>
       }
     />
+
+    <Route
+      path="/smd-payments"
+      element={
+        <ProtectedRoute roles={["admin", "staff"]}>
+          <AdminLayout>
+            <SmdPaymentFormPage />
+          </AdminLayout>
+        </ProtectedRoute>
+      }
+    />
+
 
 
     </Routes>
