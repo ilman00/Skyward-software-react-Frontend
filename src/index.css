@@ -1,59 +1,19 @@
 @import "tailwindcss";
 
+
 @media print {
-  body {
-    background: white;
-  }
 
   .no-print {
-    display: none;
+    display: none !important;
   }
 
-  @page {
-    size: A4;
+  body {
     margin: 0;
   }
-}
-
-/* Screen preview */
-
-.a4-page {
-  width: 210mm;
-  min-height: 297mm;
-  margin: 20px auto;
-  padding: 0 20mm 30mm 20mm; /* REMOVE top padding */
-  background: white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  font-family: "Noto Nastaliq Urdu", serif;
-}
-
-.paragraph-margin p {
-  margin-bottom: 0;
-}
-
-/* PRINT SETTINGS */
-@media print {
-
-  html, body {
-    width: 210mm;
-  }
-
-  .a4-page {
-    width: 210mm;
-    height: 297mm;          /* 👈 FORCE EXACT A4 HEIGHT */
-    padding: 0;
-    box-sizing: border-box;
-    page-break-after: always;
-    break-after: page;
-    overflow: hidden;       /* 👈 Prevent spill */
-  }
 
   @page {
     size: A4;
-    margin-top: 40mm;
-    margin-right: 20mm;
-    margin-left: 20mm;
-    margin-bottom: 30mm;
+    margin: 10mm;
   }
 
 }
