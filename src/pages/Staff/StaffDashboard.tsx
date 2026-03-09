@@ -1,5 +1,6 @@
 import { type FC } from "react";
 import { type ReactNode } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Users,
   UserSquare,
@@ -12,6 +13,7 @@ import {
   PlusCircle,
   CheckCircle2,
 } from "lucide-react";
+import { getStaffDashboardData } from "../../services/StaffDashbordAPIs";
 
 import { MetricCard } from "../../components/AdminDashboard/MetricCard";
 import { AlertCard } from "../../components/AdminDashboard/AlertCard";
@@ -28,6 +30,39 @@ const SectionHeader: FC<SectionHeaderProps> = ({ children }) => (
 );
 
 const StaffDashboard: FC = () => {
+
+  const [ data, setData ] = useState({
+    totalCustomers: 0,
+    totalSMDs: 0,
+    totalRentPaid: 0,
+    totalContractsClosed: 0,
+    expiringContracts: 0,
+  });
+
+  const summary = useCallback(async () => {
+    try {
+      const summaryData = await getStaffDashboardData.getDashboardSummary();
+      console.log("Summary:", summaryData);
+      setData({
+        totalCustomers: summaryData.data.total_customers,
+        totalSMDs: summaryData.data.total_smds_bought,
+        totalRentPaid: summaryData.data.total_rent_paid,
+        totalContractsClosed: summaryData.data.total_contracts_closed,
+        expiringContracts: summaryData.data.expiring_contracts,
+      });
+    } catch (error) {
+      console.error("Failed to fetch summary:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    summary();
+  }, [summary]);
+
+  
+
+
+
   return (
     <div className="space-y-10 bg-gray-50 min-h-screen p-8">
 
@@ -126,42 +161,37 @@ const StaffDashboard: FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <MetricCard
             title="My Customers"
-            value="--"
+            value={data.totalCustomers}
             icon={<Users />}
             variant="blue"
           />
 
           <MetricCard
             title="My SMDs"
-            value="--"
+            value={data.totalSMDs}
             icon={<Layers />}
             variant="blue"
           />
 
           <MetricCard
             title="Rent Paid"
-            value="--"
+            value={`PKR ${data.totalRentPaid}`}
             icon={<DollarSign />}
             variant="success"
           />
 
           <MetricCard
             title="Contracts Closed"
-            value="--"
+            value={data.totalContractsClosed}
             icon={<FileWarning />}
             variant="success"
           />
 
-          <MetricCard
-            title="Active Ads"
-            value="--"
-            icon={<Layers />}
-            variant="warning"
-          />
+         
 
           <MetricCard
             title="Expiring Contracts"
-            value="--"
+            value={data.expiringContracts}
             icon={<Timer />}
             variant="warning"
           />

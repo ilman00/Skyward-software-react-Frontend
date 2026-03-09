@@ -61,4 +61,15 @@ export const MarketerDashboardAPIs = {
     return response.data;
   },
 
+  getEarnings: async () => {
+    const response = await apiClient.get("/marketer/dashboard/earnings");
+    return response.data.data;
+  },
+
+  getCustomers: async () => {
+    const response = await apiClient.get("/marketer/dashboard/customers");
+    return response.data.data;
+  }
+
+
 }

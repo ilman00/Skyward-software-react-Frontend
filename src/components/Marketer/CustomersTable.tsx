@@ -1,5 +1,5 @@
 import React from "react";
-import { Phone, Wallet, Monitor, ArrowUpRight, Trash2 } from "lucide-react";
+import { Phone, Wallet, Monitor, ArrowUpRight } from "lucide-react";
 
 export interface Customer {
   id: string;
@@ -16,7 +16,7 @@ interface Props {
   onRowClick?: (id: string) => void;
 }
 
-const CustomersTable: React.FC<Props> = ({ customers, onDelete, onRowClick }) => {
+const CustomersTable: React.FC<Props> = ({ customers, onRowClick }) => {
   return (
     <div className="w-full space-y-4">
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -28,7 +28,6 @@ const CustomersTable: React.FC<Props> = ({ customers, onDelete, onRowClick }) =>
                 <th className="px-6 py-4 text-xs font-semibold uppercase text-slate-500 tracking-wider">Contact Info</th>
                 <th className="px-6 py-4 text-xs font-semibold uppercase text-slate-500 tracking-wider text-center">Active SMDs</th>
                 <th className="px-6 py-4 text-xs font-semibold uppercase text-slate-500 tracking-wider">Financials</th>
-                <th className="px-6 py-4 text-right text-xs font-semibold uppercase text-slate-500 tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -77,7 +76,7 @@ const CustomersTable: React.FC<Props> = ({ customers, onDelete, onRowClick }) =>
                   </td>
 
                   {/* Actions Column */}
-                  <td className="px-6 py-4 text-right">
+                  {/* <td className="px-6 py-4 text-right">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -87,7 +86,7 @@ const CustomersTable: React.FC<Props> = ({ customers, onDelete, onRowClick }) =>
                     >
                       <Trash2 size={18} />
                     </button>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>

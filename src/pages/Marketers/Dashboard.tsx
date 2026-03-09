@@ -1,20 +1,31 @@
-import { useEffect, useState } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { MetricCard } from "../../components/AdminDashboard/MetricCard"; 
 import { Users, Layers, DollarSign, Wallet, CalendarClock } from "lucide-react";
+import { MarketerDashboardAPIs } from "../../services/MarketerAPIs";
 
 const Dashboard = () => {
   const [data, setData] = useState<any>(null);
 
-  useEffect(() => {
-    // Simulating API fetch
+  const fetchSummary = useCallback(async () => {
+  try {
+    const summary = await MarketerDashboardAPIs.getSummary();
+    console.log("Summary:", summary);
     setData({
-      totalClients: 120,
-      totalSmds: 45,
-      totalEarnings: 120000,
-      pending: 25000,
-      thisMonth: 35000
+      totalClients:  summary.data.total_customers,
+      totalSmds:     summary.data.total_smds_bought,
+      totalEarnings: summary.data.total_commission_earned,
+      pending:       summary.data.unpaid_commission,
+      thisMonth:     0, // Not yet available from API — placeholder until endpoint supports it
     });
-  }, []);
+  } catch (error) {
+    console.error("Failed to fetch summary:", error);
+  }
+}, []);
+
+  useEffect(() => {
+    fetchSummary();
+  }, [fetchSummary]);
+
 
   if (!data) return (
     <div className="p-8 flex items-center justify-center min-h-[400px]">
@@ -56,7 +67,7 @@ const Dashboard = () => {
 
         <MetricCard
           title="Total Earnings"
-          value={`PKR ${data.totalEarnings.toLocaleString()}`}
+          value={`PKR ${data.totalEarnings}`}
           icon={<DollarSign size={24} />}
           variant="success"
           trend={18}
@@ -65,7 +76,7 @@ const Dashboard = () => {
 
         <MetricCard
           title="Pending Commission"
-          value={`PKR ${data.pending.toLocaleString()}`}
+          value={`PKR ${data.pending}`}
           icon={<Wallet size={24} />}
           variant="warning"
           change="Processing for next payout"
@@ -73,7 +84,7 @@ const Dashboard = () => {
 
         <MetricCard
           title="This Month"
-          value={`PKR ${data.thisMonth.toLocaleString()}`}
+          value={`PKR ${data.thisMonth}`}
           icon={<CalendarClock size={24} />}
           variant="success"
           trend={24}
