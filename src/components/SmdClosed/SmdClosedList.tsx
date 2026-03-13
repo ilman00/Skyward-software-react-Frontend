@@ -43,6 +43,7 @@ const ClosedDealsList: React.FC<Props> = ({ deals, loading, search, onSearchChan
                 <th className="px-6 py-4 text-xs font-bold uppercase text-slate-500">Financials</th>
                 <th className="px-6 py-4 text-xs font-bold uppercase text-slate-500">Closing Info</th>
                 <th className="px-6 py-4 text-right text-xs font-bold uppercase text-slate-500">Status</th>
+                <th className="px-6 py-4 text-right text-xs font-bold uppercase text-slate-500">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 relative">
@@ -118,6 +119,8 @@ const ClosedDealsList: React.FC<Props> = ({ deals, loading, search, onSearchChan
                         {deal.closing_status}
                       </span>
                     </td>
+                    {/* Actions */}
+                    <td className="px-6 py-5 text-right">  </td>
                   </tr>
                 ))
               ) : (
