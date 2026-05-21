@@ -16,7 +16,8 @@ import {
   Home,
   ChevronDown,
   Handshake,
-  FileArchive
+  FileArchive,
+  DoorOpen,
 } from "lucide-react";
 import useAuth from "../../auth/useAuth";
 
@@ -188,6 +189,17 @@ const Sidebar: FC = () => {
             <div className="space-y-1 ml-2">
               {/* <NavItem to="/pdf" icon={<Handshake size={18} />} label="View Sample PDF" /> */}
               <NavItem to="/my-contracts" icon={<FileArchive size={18} />} label="My Contracts" />
+            </div>
+          </NavSection>
+          <NavSection
+            title="Reception"
+            icon={<DoorOpen size={16} />}
+            id="reception"
+            collapsible={true}
+          >
+            <div className="space-y-1 ml-2">
+              {/* <NavItem to="/pdf" icon={<Handshake size={18} />} label="View Sample PDF" /> */}
+              <NavItem to="/visitors" icon={<FileArchive size={18} />} label="Reception" />
             </div>
           </NavSection>
 

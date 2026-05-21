@@ -33,6 +33,7 @@ import ClientManagementPage from "../pages/user/ClientManagementPage";
 import PDFPage from "../pages/contractPDF/PDFPage";
 import ContractPage from "../pages/contractPDF/Contract";
 import SmdPaymentFormPage from "../pages/SmdPayments/smdPaymentsForm";
+import VisitorsPage from "../pages/Reception/VisitorsPage";
 
 
 const AppRouter = () => {
@@ -325,6 +326,17 @@ const AppRouter = () => {
         <ProtectedRoute roles={["admin", "staff"]}>
           <AdminLayout>
             <SmdPaymentFormPage />
+          </AdminLayout>
+        </ProtectedRoute>
+      }
+    />
+
+    <Route
+      path="/visitors"
+      element={
+        <ProtectedRoute roles={["admin", "staff"]}>
+          <AdminLayout>
+            <VisitorsPage />
           </AdminLayout>
         </ProtectedRoute>
       }
