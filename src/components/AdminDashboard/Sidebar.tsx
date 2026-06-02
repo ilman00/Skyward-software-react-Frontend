@@ -136,7 +136,7 @@ const Sidebar: FC = () => {
           {/* User Card */}
           <div className="mt-4 p-3 rounded-lg bg-blue-700 bg-opacity-50 border border-blue-600 hover:bg-opacity-70 transition-all duration-200">
             <p className="text-sm font-semibold text-white truncate">{user?.full_name || "User"}</p>
-            <p className="text-xs text-blue-200">Administrator</p>
+            <p className="text-xs text-blue-200">{user?.role === "admin" ? "Administrator" : user?.role}</p>
           </div>
         </div>
 

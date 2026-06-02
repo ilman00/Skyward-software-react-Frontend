@@ -46,11 +46,11 @@ const StaffListPage: React.FC = () => {
   };
 
   const deleteUser = async (id: string) => {
-    if (!confirm("Delete this user?")) return;
+    if (!confirm("Delete this user? This action is irreversible.")) return;
 
     const toastId = toast.loading("Deleting user...");
     try {
-      await UserAPI.deleteUser(id);
+      await UserAPI.hardDeleteUser(id);
       setUsers((prev) => prev.filter((u) => u.user_id !== id));
       toast.success("User deleted", { id: toastId });
     } catch (err: any) {

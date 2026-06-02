@@ -52,8 +52,8 @@ const BalancePaymentPage: React.FC = () => {
 
     const res = await BalancePaymentAPIs.getRemainingBalance(customerId, smdId);
     console.log("API Response for Remaining Balance:", res);
-    setRemainingBalance(res.summary.total_remaining_balance); // ✅ removed .data
-    console.log("Remaining Balance:", res.summary.total_remaining_balance);
+    console.log("Remaining Balance:", res.data.summary.total_remaining_balance);
+    setRemainingBalance(res.data.summary.total_remaining_balance); // ✅ removed .data
   } catch (error: any) {
     toast.error(error?.response?.data?.message || "Failed to fetch remaining balance");
     setRemainingBalance(0);

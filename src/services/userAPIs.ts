@@ -62,7 +62,12 @@ export const UserAPI = {
   deleteUser: async (id: string): Promise<{ message: string }> => {
     const { data } = await apiClient.delete(`/users/${id}`);
     return data;
-  }
+  },
+
+  hardDeleteUser: async (id: string): Promise<{ message: string }> => {
+    const { data } = await apiClient.delete(`/users/hard-delete/${id}`);
+    return data;
+  },
 };
 
 export const UserPageAPI = {
