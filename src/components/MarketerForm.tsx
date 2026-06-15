@@ -3,7 +3,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Save, AlertCircle, Loader2, User, Wallet } from "lucide-react";
+import { ArrowLeft, Save, AlertCircle, Loader2, User, Wallet, Eye, EyeOff } from "lucide-react";
+import { useState } from "react"; // add this import
 
 const marketerSchema = z.object({
   full_name: z.string().min(2, "Full name is required"),
@@ -26,6 +27,7 @@ interface Props {
 const inputClass = "w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-gray-700";
 
 const AddMarketerForm: React.FC<Props> = ({ onFormSubmit }) => {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -33,9 +35,9 @@ const AddMarketerForm: React.FC<Props> = ({ onFormSubmit }) => {
     formState: { errors, isSubmitting },
   } = useForm<MarketerForm>({
     resolver: zodResolver(marketerSchema),
-    defaultValues: { 
-        commission_type: "percentage",
-        commission_value: 0
+    defaultValues: {
+      commission_type: "percentage",
+      commission_value: 0
     },
   });
 
@@ -78,7 +80,22 @@ const AddMarketerForm: React.FC<Props> = ({ onFormSubmit }) => {
                 </Field>
 
                 <Field label="Password *" error={errors.password?.message} className="md:col-span-2">
-                  <input {...register("password")} type="password" className={inputClass} placeholder="••••••••" />
+                  <div className="relative">
+                    <input
+                      {...register("password")}
+                      type={showPassword ? "text" : "password"}
+                      className={`${inputClass} pr-12`}
+                      placeholder="••••••••"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                      tabIndex={-1}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
                 </Field>
 
                 <Field label="Contact Number" error={errors.contact_number?.message}>
@@ -122,10 +139,10 @@ const AddMarketerForm: React.FC<Props> = ({ onFormSubmit }) => {
                   label={commissionType === "percentage" ? "Commission Percentage *" : "Commission Amount *"}
                   error={errors.commission_value?.message}
                 >
-                  <input 
-                    {...register("commission_value", { valueAsNumber: true })} 
-                    type="number" 
-                    className={inputClass} 
+                  <input
+                    {...register("commission_value", { valueAsNumber: true })}
+                    type="number"
+                    className={inputClass}
                   />
                 </Field>
               </div>
@@ -134,11 +151,11 @@ const AddMarketerForm: React.FC<Props> = ({ onFormSubmit }) => {
 
           {/* Form Actions */}
           <div className="flex items-center justify-end gap-4 pb-12">
-            <Link 
-                to="/dashboard" 
-                className="px-6 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
+            <Link
+              to="/dashboard"
+              className="px-6 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
             >
-                Cancel
+              Cancel
             </Link>
             <button
               type="submit"
@@ -158,17 +175,17 @@ const AddMarketerForm: React.FC<Props> = ({ onFormSubmit }) => {
   );
 };
 
-const Field: React.FC<{ label: string; error?: string; className?: string; children: React.ReactNode }> = 
-({ label, error, className, children }) => (
-  <div className={`space-y-1.5 ${className}`}>
-    <label className="text-sm font-semibold text-gray-700 ml-1">{label}</label>
-    {children}
-    {error && (
+const Field: React.FC<{ label: string; error?: string; className?: string; children: React.ReactNode }> =
+  ({ label, error, className, children }) => (
+    <div className={`space-y-1.5 ${className}`}>
+      <label className="text-sm font-semibold text-gray-700 ml-1">{label}</label>
+      {children}
+      {error && (
         <p className="text-red-600 text-xs flex items-center gap-1.5 mt-1 ml-1 font-medium">
-            <AlertCircle size={14} /> {error}
+          <AlertCircle size={14} /> {error}
         </p>
-    )}
-  </div>
-);
+      )}
+    </div>
+  );
 
 export default AddMarketerForm;

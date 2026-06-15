@@ -81,7 +81,7 @@ export const UserPageAPI = {
   },
 
   deleteUser: async (userId: string) => {
-    const { data } = await apiClient.delete(`/users/${userId}`);
+    const { data } = await apiClient.delete(`/users/hard-delete/${userId}`);
     return data;
   }
 }
