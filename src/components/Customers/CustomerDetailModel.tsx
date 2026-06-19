@@ -76,7 +76,7 @@ const CustomerDetailModal: React.FC<Props> = ({ customer, onClose }) => {
                 </div>
                 <Field label="CNIC" value={customer.cnic} />
                 <Field label="Email" value={customer.email} />
-                <Field label="Phone" value={customer.contact_number} />
+                <Field label="Phone" value={customer.phone_number} />
                 <Field label="City" value={customer.city} />
                 <Field label="Address" value={customer.address} />
               </div>

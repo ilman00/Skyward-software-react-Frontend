@@ -19,7 +19,7 @@ export interface Customer {
   customer_id: string;
   full_name: string;
   email: string;
-  contact_number: string;
+  phone_number: string;
   city: string;
   address: string;
   created_by_name: string;

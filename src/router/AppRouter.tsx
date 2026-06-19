@@ -34,6 +34,7 @@ import PDFPage from "../pages/contractPDF/PDFPage";
 import ContractPage from "../pages/contractPDF/Contract";
 import SmdPaymentFormPage from "../pages/SmdPayments/smdPaymentsForm";
 import VisitorsPage from "../pages/Reception/VisitorsPage";
+import ForgotPasswordPage from "../pages/forgotPassword/forgotPasswordPage";
 
 
 const AppRouter = () => {
@@ -60,6 +61,8 @@ const AppRouter = () => {
           </PublicLayout>
         }
       />
+
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
       <Route
         path="/register"

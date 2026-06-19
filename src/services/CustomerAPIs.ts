@@ -20,7 +20,7 @@ export const CustomerAPIs = {
     },
 
     deleteCustomer: async (customerId: string) => {
-        const response = await apiClient.delete(`/customers/${customerId}`);
+        const response = await apiClient.delete(`/customers/hard-delete/${customerId}`);
         return response.data;
     },
 

@@ -1,5 +1,5 @@
 import React from "react";
-import {  Mail, MapPin, Monitor, Phone, User } from "lucide-react";
+import {  Mail, MapPin, Monitor, Phone, User, Trash2 } from "lucide-react";
 import { type Customer } from "../../pages/Customers/CustomerListPage";
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
   };
 }
 
-const CustomerList: React.FC<Props> = ({ customers, onRowClick, pagination }) => {
+const CustomerList: React.FC<Props> = ({ customers, onDelete, onRowClick, pagination }) => {
   return (
     <div className="p-8 w-full mx-auto space-y-6">
       <header>
@@ -31,7 +31,7 @@ const CustomerList: React.FC<Props> = ({ customers, onRowClick, pagination }) =>
                 <th className="px-6 py-4 text-xs font-semibold uppercase text-slate-500">Purchased SMDs</th>
                 <th className="px-6 py-4 text-xs font-semibold uppercase text-slate-500">Location</th>
                 <th className="px-6 py-4 text-xs font-semibold uppercase text-slate-500">Added By</th>
-                {/* <th className="px-6 py-4 text-right text-xs font-semibold uppercase text-slate-500">Actions</th> */}
+                <th className="px-6 py-4 text-right text-xs font-semibold uppercase text-slate-500">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -52,7 +52,7 @@ const CustomerList: React.FC<Props> = ({ customers, onRowClick, pagination }) =>
 
                   <td className="px-6 py-4">
                     <span className="text-sm text-slate-600 flex items-center gap-1">
-                      <Phone size={14} className="text-slate-400" /> {c.contact_number}
+                      <Phone size={14} className="text-slate-400" /> {c.phone_number}
                     </span>
                   </td>
 
@@ -88,7 +88,7 @@ const CustomerList: React.FC<Props> = ({ customers, onRowClick, pagination }) =>
                     </span>
                   </td>
 
-                  {/* <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-4 text-right">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -97,7 +97,7 @@ const CustomerList: React.FC<Props> = ({ customers, onRowClick, pagination }) =>
                     >
                       <Trash2 size={20} />
                     </button>
-                  </td> */}
+                  </td>
                 </tr>
               ))}
             </tbody>
