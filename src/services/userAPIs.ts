@@ -76,6 +76,7 @@ export const UserPageAPI = {
     return data;
   },
   updateBusinessRoles: async (userId: string, payload: BusinessRolePayload) => {
+    console.log("Updating user roles:", userId, payload);
     const { data } = await apiClient.put(`/users/${userId}/business-roles`, payload);
     return data;
   },

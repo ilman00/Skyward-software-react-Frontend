@@ -89,18 +89,18 @@ const CustomerList: React.FC<Props> = ({ customers, onDelete, onRowClick, pagina
                   </td>
 
                   <td className="px-6 py-4 text-right">
-                    <button
+                    {/* <button
                       onClick={(e) => {
                         e.stopPropagation();
                         onDelete(c.customer_id);
                       }}
                     >
                       <Trash2 size={20} />
-                    </button>
+                    </button> */}
                   </td>
                 </tr>
               ))}
-            </tbody>
+            </tbody>j
           </table>
         </div>
 

@@ -16,6 +16,7 @@ const StaffListPage: React.FC = () => {
         page: 1,
         limit: 100
       });
+      console.log("Fetched users:", data);
       setUsers(data); // adjust if your response differs
     } catch (err: any) {
       toast.error(

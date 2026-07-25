@@ -109,4 +109,4 @@ export const BalancePaymentAPIs = {
     const response = await apiClient.post("/record-payment", payload);
     return response.data;
   },
-};
+}; 

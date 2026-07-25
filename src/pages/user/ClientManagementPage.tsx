@@ -9,7 +9,7 @@ const ClientManagementPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   
   // Pagination & Search State
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1);  
   const [total, setTotal] = useState(0);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { 
-  Search, Trash, UserCircle, ChevronLeft, ChevronRight, 
+  Search,  UserCircle, ChevronLeft, ChevronRight, 
   Loader2, Edit2, X, Save 
 } from "lucide-react";
 
@@ -8,6 +8,7 @@ export interface ClientMember {
   user_id: string;
   full_name: string;
   email: string;
+  status: string;
   roles: { is_marketer: boolean; is_customer: boolean };
   marketer: { status: string; commission_value: number } | null;
   customer: { status: string; city: string } | null;
@@ -34,7 +35,7 @@ const UserList: React.FC<UserListProps> = ({
   data = [], 
   loading, 
   onUpdate,
-  onDelete, 
+  // onDelete, 
   total = 0, 
   currentPage, 
   onPageChange, 
@@ -52,9 +53,9 @@ const UserList: React.FC<UserListProps> = ({
   const handleStartEdit = (u: ClientMember) => {
     setEditingId(u.user_id);
     // Grab status from whichever role exists
-    const currentStatus = u.marketer?.status || u.customer?.status || "active";
+    // const currentStatus = u.marketer?.status || u.customer?.status || "active";
     setEditForm({
-      status: currentStatus,
+      status: u.status ?? "active",
       is_marketer: u.roles.is_marketer,
       is_customer: u.roles.is_customer
     });
@@ -103,7 +104,7 @@ const UserList: React.FC<UserListProps> = ({
             <tbody className="divide-y divide-slate-100">
               {data.length > 0 ? data.map((u) => {
                 const isEditing = editingId === u.user_id;
-                const activeStatus = u.marketer?.status || u.customer?.status || "active";
+                const activeStatus = u.status || u.marketer?.status || u.customer?.status || "active";
 
                 return (
                   <tr key={u.user_id} className="hover:bg-slate-50/50 transition-colors">
@@ -181,9 +182,9 @@ const UserList: React.FC<UserListProps> = ({
                             <button onClick={() => handleStartEdit(u)} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
                               <Edit2 size={18}/>
                             </button>
-                            <button onClick={() => onDelete(u.user_id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
+                            {/* <button onClick={() => onDelete(u.user_id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
                               <Trash size={18}/>
-                            </button>
+                            </button> */}
                           </>
                         )}
                       </div>

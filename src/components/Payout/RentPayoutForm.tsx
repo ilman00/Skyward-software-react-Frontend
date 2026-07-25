@@ -14,6 +14,7 @@ import {
 interface SMD {
   smd_id: string;
   smd_code: string;
+  monthly_rent: number;
 }
 
 interface CustomerOption {
@@ -54,6 +55,16 @@ const RentPayoutForm: React.FC<Props> = ({
     payout_month: "",
     amount: "",
   });
+
+  const selectedSmd = smds.find((s) => s.smd_id === form.smd_id);
+  const handleSmdChange = (smdId: string) => {
+    const chosen = smds.find((s) => s.smd_id === smdId);
+    setForm((prev) => ({
+      ...prev,
+      smd_id: smdId,
+      amount: chosen ? String(chosen.monthly_rent) : "",
+    }));
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -142,12 +153,7 @@ const RentPayoutForm: React.FC<Props> = ({
 
                 <select
                   value={form.smd_id}
-                  onChange={(e) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      smd_id: e.target.value,
-                    }))
-                  }
+                  onChange={(e) => handleSmdChange(e.target.value)}
                   className={inputClass}
                   disabled={!form.customer_id || isLoadingSmds}
                   required
@@ -162,6 +168,15 @@ const RentPayoutForm: React.FC<Props> = ({
                     </option>
                   ))}
                 </select>
+
+                {selectedSmd && (
+                  <p className="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                    <DollarSign size={12} />
+                    Monthly rent: <span className="font-semibold text-gray-700">
+                      Rs. {selectedSmd.monthly_rent.toLocaleString()}
+                    </span>
+                  </p>
+                )}
 
                 {!isLoadingSmds &&
                   form.customer_id &&
