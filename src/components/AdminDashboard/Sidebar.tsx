@@ -15,7 +15,6 @@ import {
   HandCoins,
   Home,
   ChevronDown,
-  Handshake,
   FileArchive,
   DoorOpen,
 } from "lucide-react";
@@ -180,17 +179,7 @@ const Sidebar: FC = () => {
             </div>
           </NavSection>
 
-          <NavSection
-            title="Contract"
-            icon={<Handshake size={16} />}
-            id="contract"
-            collapsible={true}
-          >
-            <div className="space-y-1 ml-2">
-              {/* <NavItem to="/pdf" icon={<Handshake size={18} />} label="View Sample PDF" /> */}
-              <NavItem to="/my-contracts" icon={<FileArchive size={18} />} label="My Contracts" />
-            </div>
-          </NavSection>
+          
           <NavSection
             title="Reception"
             icon={<DoorOpen size={16} />}

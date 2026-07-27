@@ -31,7 +31,6 @@ import Earnings from "../pages/Marketers/Earnings";
 import MarketerLayout from "../layouts/MarketerLayout";
 import ClientManagementPage from "../pages/user/ClientManagementPage";
 import PDFPage from "../pages/contractPDF/PDFPage";
-import ContractPage from "../pages/contractPDF/Contract";
 import SmdPaymentFormPage from "../pages/SmdPayments/smdPaymentsForm";
 import VisitorsPage from "../pages/Reception/VisitorsPage";
 import ForgotPasswordPage from "../pages/forgotPassword/forgotPasswordPage";
@@ -313,16 +312,7 @@ const AppRouter = () => {
         }
       />
 
-      <Route
-        path="/my-contracts"
-        element={
-          <ProtectedRoute roles={["admin", "staff"]}>
-            <AdminLayout>
-              <ContractPage />
-            </AdminLayout>
-          </ProtectedRoute>
-        }
-      />
+      
 
       <Route
         path="/smd-payments"
