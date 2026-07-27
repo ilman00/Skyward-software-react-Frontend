@@ -109,11 +109,7 @@ const AddSmdForm: React.FC<AddSmdFormProps> = ({ onSubmit, isSubmitting }) => {
   const validate = () => {
     const newErrors: FormErrors = {};
     if (!formData.smd_code) newErrors.smd_code = "SMD code is required.";
-    if (!formData.purchase_price) {
-      newErrors.purchase_price = "Purchase price is required.";
-    } else if (Number(formData.purchase_price) <= 0) {
-      newErrors.purchase_price = "Price must be greater than 0.";
-    }
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -192,6 +188,7 @@ const AddSmdForm: React.FC<AddSmdFormProps> = ({ onSubmit, isSubmitting }) => {
                   value={formData.purchase_price}
                   onChange={handleChange}
                   error={errors.purchase_price}
+                  required={false}
                   disabled={isSubmitting}
                   prefix={<DollarSign size={18} />}
                 />

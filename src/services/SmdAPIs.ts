@@ -16,10 +16,10 @@ export const SmdAPIs = {
     const response = await apiClient.post("/add-smd", payload);
     return response.data;
   },
-  getSmd: async ( customer_id: string ) => {
+  getSmd: async (customer_id: string) => {
     const response = await apiClient.get("/smds", {
       params: { customer_id },
-    } );
+    });
     return response.data;
   },
 

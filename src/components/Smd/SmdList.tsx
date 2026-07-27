@@ -1,8 +1,36 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Trash2, Search, MapPin, DollarSign, Calendar, Loader2 } from "lucide-react";
+import { Trash2, Search, MapPin, Calendar, Loader2 } from "lucide-react";
 import SmdDetailsModal from "./SmdDetailsModal";
 import { type SmdTableItem } from "../../types/smd.types";
-import { SmdAPIs as smdService} from "../../services/SmdAPIs";
+import { SmdAPIs as smdService } from "../../services/SmdAPIs";
+
+// Add this above the component, or in a utils file
+const getPageNumbers = (current: number, total: number): (number | "...")[] => {
+    const delta = 1; // how many pages to show around current
+    const range: (number | "...")[] = [];
+    const rangeStart = Math.max(2, current - delta);
+    const rangeEnd = Math.min(total - 1, current + delta);
+
+    range.push(1);
+
+    if (rangeStart > 2) {
+        range.push("...");
+    }
+
+    for (let i = rangeStart; i <= rangeEnd; i++) {
+        range.push(i);
+    }
+
+    if (rangeEnd < total - 1) {
+        range.push("...");
+    }
+
+    if (total > 1) {
+        range.push(total);
+    }
+
+    return range;
+};
 
 const SmdList: React.FC = () => {
     // API Data States
@@ -24,10 +52,10 @@ const SmdList: React.FC = () => {
             setLoading(true);
             setError(null);
             const response = await smdService.getAll(page, search);
-            
+
             // Assuming response structure: { data: { data: [...], total_pages: 5 } }
             setData(response.data);
-            setTotalPages(response.total_pages);
+            setTotalPages(response.totalPages);
         } catch (err) {
             setError("Failed to load inventory. Please try again later.");
             console.error("API Error:", err);
@@ -64,7 +92,7 @@ const SmdList: React.FC = () => {
     return (
         <div className="min-h-screen bg-slate-50 p-8 text-slate-900">
             <div className="max-w-7xl mx-auto space-y-8">
-                
+
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
@@ -107,9 +135,7 @@ const SmdList: React.FC = () => {
                                         <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
                                             <div className="flex items-center gap-2"><MapPin size={14} /> Title</div>
                                         </th>
-                                        <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                            <div className="flex items-center gap-2"><DollarSign size={14} /> Price</div>
-                                        </th>
+
                                         <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
                                             <div className="flex items-center gap-2"><Calendar size={14} /> Installed</div>
                                         </th>
@@ -139,9 +165,7 @@ const SmdList: React.FC = () => {
                                                 <td className="px-6 py-4 font-medium text-slate-700">
                                                     {smd.title || "N/A"}
                                                 </td>
-                                                <td className="px-6 py-4 text-slate-600">
-                                                    PKR {smd.purchase_price.toLocaleString()}
-                                                </td>
+
                                                 <td className="px-6 py-4 text-slate-500 text-sm">
                                                     {smd.installed_at}
                                                 </td>
@@ -162,25 +186,47 @@ const SmdList: React.FC = () => {
                     )}
 
                     {/* Pagination */}
+                    {/* Pagination */}
                     {!loading && !error && totalPages > 1 && (
                         <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
                             <p className="text-sm text-slate-500">
                                 Showing page {page} of {totalPages}
                             </p>
-                            <div className="flex gap-2">
-                                {Array.from({ length: totalPages }).map((_, i) => (
-                                    <button
-                                        key={i + 1}
-                                        onClick={() => setPage(i + 1)}
-                                        className={`w-8 h-8 rounded text-sm font-medium transition-all ${
-                                            page === i + 1
-                                                ? "bg-blue-600 text-white shadow-sm"
-                                                : "bg-white border border-slate-200 text-slate-600 hover:border-blue-400"
-                                        }`}
-                                    >
-                                        {i + 1}
-                                    </button>
-                                ))}
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                                    disabled={page === 1}
+                                    className="px-3 h-8 rounded text-sm font-medium border border-slate-200 bg-white text-slate-600 hover:border-blue-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                >
+                                    Prev
+                                </button>
+
+                                {getPageNumbers(page, totalPages).map((p, i) =>
+                                    p === "..." ? (
+                                        <span key={`ellipsis-${i}`} className="px-2 text-slate-400 select-none">
+                                            …
+                                        </span>
+                                    ) : (
+                                        <button
+                                            key={p}
+                                            onClick={() => setPage(p)}
+                                            className={`w-8 h-8 rounded text-sm font-medium transition-all ${page === p
+                                                    ? "bg-blue-600 text-white shadow-sm"
+                                                    : "bg-white border border-slate-200 text-slate-600 hover:border-blue-400"
+                                                }`}
+                                        >
+                                            {p}
+                                        </button>
+                                    )
+                                )}
+
+                                <button
+                                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                                    disabled={page === totalPages}
+                                    className="px-3 h-8 rounded text-sm font-medium border border-slate-200 bg-white text-slate-600 hover:border-blue-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                >
+                                    Next
+                                </button>
                             </div>
                         </div>
                     )}
