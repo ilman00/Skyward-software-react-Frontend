@@ -100,7 +100,7 @@ const CustomerList: React.FC<Props> = ({ customers,  onRowClick, pagination }) =
                   </td>
                 </tr>
               ))}
-            </tbody>j
+            </tbody>
           </table>
         </div>
 
