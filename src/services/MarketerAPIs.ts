@@ -53,6 +53,14 @@ export const MarketerAPIs = {
       throw error;
     }
   },
+  getMarketerDetails: async (id: string) => {
+    const response = await apiClient.get(`/marketers/${id}/details`);
+    return response.data; // { success, data }
+  },
+  getSmdRentHistory: async (smdClosingId: string) => {
+    const response = await apiClient.get(`/smd-closings/${smdClosingId}/rent-history`);
+    return response.data;
+  },
 };
 
 export const MarketerDashboardAPIs = {

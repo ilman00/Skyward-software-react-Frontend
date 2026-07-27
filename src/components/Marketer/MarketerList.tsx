@@ -11,7 +11,7 @@ import {
   Search,
   Loader,
 } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 // FIXED: Path updated to match your file structure
 import { type Marketer } from "../../pages/Marketers/MarketerListPage"
 
@@ -43,7 +43,7 @@ const MarketersList: React.FC<Props> = ({
   const [editForm, setEditForm] = useState<Partial<Marketer>>({});
   const [savingId, setSavingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-
+  const navigate = useNavigate();
   // Pagination Logic
   const totalPages = Math.max(1, Math.ceil(marketers.length / PAGE_SIZE));
   const paginatedData = marketers.slice(
@@ -167,9 +167,11 @@ const MarketersList: React.FC<Props> = ({
                 return (
                   <tr
                     key={m.id}
-                    className={`border-b border-slate-200 hover:bg-slate-100 transition-colors ${
-                      index % 2 === 0 ? "bg-white" : "bg-slate-50"
-                    } ${isDeleting ? "opacity-50" : ""}`}
+                    onClick={() => {
+                      if (!isEditing) navigate(`/marketers/${m.id}`);
+                    }}
+                    className={`border-b border-slate-200 hover:bg-slate-100 transition-colors cursor-pointer ${index % 2 === 0 ? "bg-white" : "bg-slate-50"
+                      } ${isDeleting ? "opacity-50" : ""}`}
                   >
                     <td className="px-6 py-3 text-sm text-slate-800">
                       {m.full_name}
@@ -256,7 +258,8 @@ const MarketersList: React.FC<Props> = ({
                       ) : (
                         <>
                           <button
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.stopPropagation();
                               setEditingId(m.id);
                               setEditForm(m); // FIXED: Initializes the form with current values
                             }}
@@ -267,7 +270,10 @@ const MarketersList: React.FC<Props> = ({
                             <Edit2 className="w-4 h-4 text-blue-600" />
                           </button>
                           <button
-                            onClick={() => handleDelete(m.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(m.id);
+                            }}
                             disabled={isDeleting}
                             className="p-1 hover:bg-red-100 rounded transition-colors disabled:opacity-50"
                             title="Delete"

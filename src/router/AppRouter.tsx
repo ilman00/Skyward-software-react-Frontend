@@ -35,6 +35,7 @@ import ContractPage from "../pages/contractPDF/Contract";
 import SmdPaymentFormPage from "../pages/SmdPayments/smdPaymentsForm";
 import VisitorsPage from "../pages/Reception/VisitorsPage";
 import ForgotPasswordPage from "../pages/forgotPassword/forgotPasswordPage";
+import MarketerDetailPage from "../pages/Marketers/MarketerDetailPage";
 
 
 const AppRouter = () => {
@@ -301,50 +302,60 @@ const AppRouter = () => {
         }
       />
 
-    <Route 
-      path="/users"
-      element={
-        <ProtectedRoute roles={["admin", "staff"]}>
-          <AdminLayout>
-            <ClientManagementPage />
-          </AdminLayout>
-        </ProtectedRoute>
-      }
-    />
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <ClientManagementPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
 
-    <Route
-      path="/my-contracts"
-      element={
-        <ProtectedRoute roles={["admin", "staff"]}>
-          <AdminLayout>
-            <ContractPage />
-          </AdminLayout>
-        </ProtectedRoute>
-      }
-    />
+      <Route
+        path="/my-contracts"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <ContractPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
 
-    <Route
-      path="/smd-payments"
-      element={
-        <ProtectedRoute roles={["admin", "staff"]}>
-          <AdminLayout>
-            <SmdPaymentFormPage />
-          </AdminLayout>
-        </ProtectedRoute>
-      }
-    />
+      <Route
+        path="/smd-payments"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <SmdPaymentFormPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
 
-    <Route
-      path="/visitors"
-      element={
-        <ProtectedRoute roles={["admin", "staff"]}>
-          <AdminLayout>
-            <VisitorsPage />
-          </AdminLayout>
-        </ProtectedRoute>
-      }
-    />
-
+      <Route
+        path="/visitors"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <VisitorsPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path="/marketers/:id"
+        element={
+          <ProtectedRoute roles={["admin", "staff"]}>
+            <AdminLayout>
+              <MarketerDetailPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
 
 
     </Routes>
