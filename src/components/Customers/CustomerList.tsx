@@ -1,5 +1,5 @@
 import React from "react";
-import {  Mail, MapPin, Monitor, Phone, User, Trash2 } from "lucide-react";
+import {  Mail, MapPin, Monitor, Phone, User } from "lucide-react";
 import { type Customer } from "../../pages/Customers/CustomerListPage";
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
   };
 }
 
-const CustomerList: React.FC<Props> = ({ customers, onDelete, onRowClick, pagination }) => {
+const CustomerList: React.FC<Props> = ({ customers,  onRowClick, pagination }) => {
   return (
     <div className="p-8 w-full mx-auto space-y-6">
       <header>
