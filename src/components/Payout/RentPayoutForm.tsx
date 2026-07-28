@@ -8,6 +8,7 @@ import {
   AlertCircle,
   Wallet,
 } from "lucide-react";
+import { PAYMENT_METHODS } from "../../constants/paymentMethods";
 
 /* ------------------ TYPES ------------------ */
 
@@ -27,6 +28,7 @@ export interface RentPayoutFormData {
   smd_id: string;
   payout_month: string;
   amount: string;
+  payment_method: string;
 }
 
 interface Props {
@@ -54,6 +56,7 @@ const RentPayoutForm: React.FC<Props> = ({
     smd_id: "",
     payout_month: "",
     amount: "",
+    payment_method: ""
   });
 
   const selectedSmd = smds.find((s) => s.smd_id === form.smd_id);
@@ -78,6 +81,7 @@ const RentPayoutForm: React.FC<Props> = ({
         smd_id: "",
         payout_month: "",
         amount: "",
+        payment_method: ""
       });
     } finally {
       setIsSubmitting(false);
@@ -240,13 +244,39 @@ const RentPayoutForm: React.FC<Props> = ({
                   />
                 </div>
               </div>
+
+               {/* Payment Method */}
+             <div className="space-y-1.5">
+               <label className="text-sm font-semibold text-gray-700 ml-1">
+                 Payment Method *
+               </label>
+               <select
+                 value={form.payment_method}  
+                 onChange={(e) =>
+                   setForm((prev) => ({
+                     ...prev,
+                     payment_method: e.target.value,
+                   }))
+                 }
+                 className={inputClass}
+                 required
+               >
+                 <option value="">Select payment method...</option>
+                 {PAYMENT_METHODS.map((pm) => (
+                   <option key={pm.value} value={pm.value}>
+                     {pm.label}
+                   </option>
+                 ))}
+               </select>
+             </div>
+
             </div>
           </section>
 
           {/* Buttons */}
           <div className="flex justify-end">
             <button
-              disabled={!form.smd_id || isSubmitting}
+              disabled={!form.smd_id || !form.payment_method || isSubmitting}
               className="flex items-center gap-2 px-8 py-2.5 text-sm font-semibold text-white bg-blue-700 rounded-xl hover:bg-blue-800 disabled:opacity-50 transition-all shadow-sm shadow-blue-200"
             >
               {isSubmitting ? (

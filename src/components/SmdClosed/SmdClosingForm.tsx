@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AsyncSelect from "react-select/async";
 import { User, Loader2, Monitor, Plus, Trash2, Briefcase, DollarSign, Percent } from "lucide-react";
 import { dealService } from "../../services/SmdAPIs";
+import { PAYMENT_METHODS } from "../../constants/paymentMethods";
 
 /* TYPES */
 export interface SelectOption {
@@ -31,6 +32,7 @@ const CloseDealForm: React.FC<CloseDealFormProps> = ({ onCloseDeal }) => {
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     customer_id: "",
+    payment_method: "",
     smds: [{ smd_id: "", sell_price: "", amount_paid: "",monthly_rent: "", share_percentage: "" }],
   });
 
@@ -61,6 +63,7 @@ const CloseDealForm: React.FC<CloseDealFormProps> = ({ onCloseDeal }) => {
     try {
       await onCloseDeal({
         customer_id: formData.customer_id,
+        payment_method: formData.payment_method || undefined,
         smds: formData.smds.map((s) => ({
           smd_id: s.smd_id,
           sell_price: Number(s.sell_price),
@@ -108,6 +111,22 @@ const CloseDealForm: React.FC<CloseDealFormProps> = ({ onCloseDeal }) => {
               </div>
             </div>
           </section>
+
+          <div className="space-y-1.5 mt-6">
+                <label className="text-sm font-semibold text-gray-700 ml-1">Payment Method</label>
+                <select
+                  value={formData.payment_method}
+                  onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
+                  className={inputClass}
+                >
+                  <option value="">Select payment method...</option>
+                  {PAYMENT_METHODS.map((pm) => (
+                    <option key={pm.value} value={pm.value}>
+                      {pm.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
           {/* SECTION: SMD ASSETS */}
           <section className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
