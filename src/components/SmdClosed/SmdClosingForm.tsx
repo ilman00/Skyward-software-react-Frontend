@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AsyncSelect from "react-select/async";
-import { User, Loader2, Monitor, Plus, Trash2, Briefcase, DollarSign, Percent } from "lucide-react";
+import { User, Loader2, Monitor, Plus, Trash2, Briefcase, DollarSign, Percent, CreditCard } from "lucide-react";
 import { dealService } from "../../services/SmdAPIs";
 import { PAYMENT_METHODS } from "../../constants/paymentMethods";
 
@@ -33,7 +33,7 @@ const CloseDealForm: React.FC<CloseDealFormProps> = ({ onCloseDeal }) => {
   const [formData, setFormData] = useState({
     customer_id: "",
     payment_method: "",
-    smds: [{ smd_id: "", sell_price: "", amount_paid: "",monthly_rent: "", share_percentage: "" }],
+    smds: [{ smd_id: "", sell_price: "", amount_paid: "", monthly_rent: "", share_percentage: "" }],
   });
 
   /* HELPERS */
@@ -112,21 +112,29 @@ const CloseDealForm: React.FC<CloseDealFormProps> = ({ onCloseDeal }) => {
             </div>
           </section>
 
-          <div className="space-y-1.5 mt-6">
-                <label className="text-sm font-semibold text-gray-700 ml-1">Payment Method</label>
-                <select
-                  value={formData.payment_method}
-                  onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
-                  className={inputClass}
-                >
-                  <option value="">Select payment method...</option>
-                  {PAYMENT_METHODS.map((pm) => (
-                    <option key={pm.value} value={pm.value}>
-                      {pm.label}
-                    </option>
-                  ))}
-                </select>
+          <section className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="px-8 py-5 bg-gray-50/50 border-b border-gray-200 flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <CreditCard size={20} className="text-blue-700" />
               </div>
+              <h2 className="text-lg font-bold text-gray-800">Payment Method Selection</h2>
+            </div>
+
+            <div className="p-8">
+              <select
+                value={formData.payment_method}
+                onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
+                className={inputClass}
+              >
+                <option value="">Select payment method...</option>
+                {PAYMENT_METHODS.map((pm) => (
+                  <option key={pm.value} value={pm.value}>
+                    {pm.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </section>
 
           {/* SECTION: SMD ASSETS */}
           <section className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
@@ -204,7 +212,7 @@ const CloseDealForm: React.FC<CloseDealFormProps> = ({ onCloseDeal }) => {
                           className={`${inputClass} pl-10`}
                           required
                         />
-                      </div>  
+                      </div>
                     </div>
 
                     <div className="space-y-1.5">
