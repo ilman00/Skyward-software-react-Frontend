@@ -35,6 +35,7 @@ import SmdPaymentFormPage from "../pages/SmdPayments/smdPaymentsForm";
 import VisitorsPage from "../pages/Reception/VisitorsPage";
 import ForgotPasswordPage from "../pages/forgotPassword/forgotPasswordPage";
 import MarketerDetailPage from "../pages/Marketers/MarketerDetailPage";
+import NotificationRecipientsPage from "../pages/Admin/NotificationRecipientsPage";
 
 
 const AppRouter = () => {
@@ -312,7 +313,7 @@ const AppRouter = () => {
         }
       />
 
-      
+
 
       <Route
         path="/smd-payments"
@@ -335,7 +336,7 @@ const AppRouter = () => {
           </ProtectedRoute>
         }
       />
-      
+
       <Route
         path="/marketers/:id"
         element={
@@ -346,6 +347,18 @@ const AppRouter = () => {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/notification-recipients"
+        element={
+          <ProtectedRoute roles={["admin"]}>
+            <AdminLayout>
+              <NotificationRecipientsPage  />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+      
 
 
     </Routes>

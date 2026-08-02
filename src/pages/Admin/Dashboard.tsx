@@ -17,22 +17,8 @@ import { MetricCard } from "../../components/AdminDashboard/MetricCard";
 import { AlertCard } from "../../components/AdminDashboard/AlertCard";
 import ActionButton from "../../components/AdminDashboard/ActionButton";
 import { getDashboardStats, type DashboardStats } from "../../services/adminDashboardAPIs";
-
-/**
- * Formats a number as PKR currency string
- * e.g. 2500000 → "PKR 2.5M", 850000 → "PKR 850K"
- */
-const formatPKR = (amount: number): string => {
-  if (amount >= 1_000_000) {
-    const millions = amount / 1_000_000;
-    return `PKR ${millions % 1 === 0 ? millions : millions.toFixed(1)}M`;
-  }
-  if (amount >= 1_000) {
-    const thousands = amount / 1_000;
-    return `PKR ${thousands % 1 === 0 ? thousands : thousands.toFixed(1)}K`;
-  }
-  return `PKR ${amount.toLocaleString()}`;
-};
+import { formatPKR } from "../../utils/formate";
+import MoneyFlowSection from "../../components/AdminDashboard/MoneyFlowSection";
 
 const SectionHeader: FC<{ title: string; subtitle?: string }> = ({
   title,
@@ -123,6 +109,7 @@ const AdminDashboard: FC = () => {
           <ActionButton href="/closed-deals" label="Closed Deals" icon={<CheckCircle2 size={18} className="text-gray-600" />} variant="neutral" />
           <ActionButton href="/smds" label="All SMDs" icon={<UserCheck size={18} className="text-gray-600" />} variant="neutral" />
           <ActionButton href="/rent-payouts" label="Rent Payouts" icon={<DollarSign size={18} className="text-gray-600" />} variant="neutral" />
+          <ActionButton href="/notification-recipients" label="Email Recipients" icon={<Bell size={18} className="text-gray-600" />} variant="neutral" />
         </div>
       </section>
 
@@ -201,6 +188,8 @@ const AdminDashboard: FC = () => {
           )}
         </div>
       </section>
+
+      <MoneyFlowSection />
 
       {/* Alerts */}
       <section>
