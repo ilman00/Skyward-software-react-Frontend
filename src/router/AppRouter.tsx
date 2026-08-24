@@ -36,6 +36,8 @@ import VisitorsPage from "../pages/Reception/VisitorsPage";
 import ForgotPasswordPage from "../pages/forgotPassword/forgotPasswordPage";
 import MarketerDetailPage from "../pages/Marketers/MarketerDetailPage";
 import NotificationRecipientsPage from "../pages/Admin/NotificationRecipientsPage";
+import EmployeeFormPage from "../pages/AddEmployee/EmployeeFormPage";
+import EmployeeListPage from "../pages/AddEmployee/EmployeeListPage";
 
 
 const AppRouter = () => {
@@ -358,8 +360,37 @@ const AppRouter = () => {
           </ProtectedRoute>
         }
       />
-      
 
+      <Route
+        path="/employees/new"
+        element={
+          <ProtectedRoute roles={["admin"]}>
+            <AdminLayout>
+              <EmployeeFormPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/employees"
+        element={
+          <ProtectedRoute roles={["admin"]}>
+            <AdminLayout>
+              <EmployeeListPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/employees/:id/edit"
+        element={
+          <ProtectedRoute roles={["admin"]}>
+            <AdminLayout>
+              <EmployeeFormPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
 
     </Routes>
 

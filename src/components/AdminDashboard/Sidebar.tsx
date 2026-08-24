@@ -17,6 +17,7 @@ import {
   ChevronDown,
   FileArchive,
   DoorOpen,
+  Settings,
 } from "lucide-react";
 import useAuth from "../../auth/useAuth";
 
@@ -36,10 +37,9 @@ const Sidebar: FC = () => {
   };
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-      isActive
-        ? "bg-blue-600 text-white shadow-md"
-        : "text-blue-100 hover:bg-blue-700 hover:text-white"
+    `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
+      ? "bg-blue-600 text-white shadow-md"
+      : "text-blue-100 hover:bg-blue-700 hover:text-white"
     }`;
 
   const sectionClass =
@@ -62,9 +62,8 @@ const Sidebar: FC = () => {
           {title}
           <ChevronDown
             size={14}
-            className={`ml-auto transition-transform duration-200 ${
-              expandedSection === id ? "rotate-180" : ""
-            }`}
+            className={`ml-auto transition-transform duration-200 ${expandedSection === id ? "rotate-180" : ""
+              }`}
           />
         </button>
       ) : (
@@ -116,9 +115,8 @@ const Sidebar: FC = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 h-screen w-64 bg-gradient-to-b from-blue-800 to-blue-900 text-white shadow-2xl transform transition-transform duration-300 ease-in-out z-40 md:relative md:translate-x-0 md:shadow-lg overflow-y-auto ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed left-0 top-0 h-screen w-64 bg-gradient-to-b from-blue-800 to-blue-900 text-white shadow-2xl transform transition-transform duration-300 ease-in-out z-40 md:relative md:translate-x-0 md:shadow-lg overflow-y-auto ${isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         {/* Header */}
         <div className="sticky top-0 bg-gradient-to-r from-blue-800 to-blue-900 p-6 border-b border-blue-700 z-10">
@@ -179,7 +177,7 @@ const Sidebar: FC = () => {
             </div>
           </NavSection>
 
-          
+
           <NavSection
             title="Reception"
             icon={<DoorOpen size={16} />}
@@ -221,6 +219,16 @@ const Sidebar: FC = () => {
                 label="Sell SMD"
               />
             </div>
+          </NavSection>
+
+          <NavSection
+            title="Website Management"
+            icon={<Settings size={16} />}
+            id="website-management"
+            collapsible={true}
+          >
+            <NavItem to="/employees/new" icon={<UserCheck size={18} />} label="Add Employee" />
+            <NavItem to="/employees" icon={<UserCheck size={18} />} label="Manage Employees" />
           </NavSection>
         </nav>
 
