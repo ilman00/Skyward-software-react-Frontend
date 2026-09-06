@@ -8,6 +8,7 @@ import {
   Save,
   Loader2,
   Camera,
+
   Bold as BoldIcon,
   Italic as ItalicIcon,
   Link2,
@@ -17,6 +18,19 @@ import {
   EyeOff,
 } from "lucide-react";
 import type { EmployeeDetail, EmployeeFormValues } from "../../services/EmployeeAPIs";
+
+/**
+ * Mirrors the backend's slug format rules for live client-side suggestion.
+ * Final uniqueness/format validation still happens server-side.
+ */
+const slugify = (input: string): string =>
+  input
+    .toLowerCase()
+    .trim()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 
 /* ------------------ TYPES ------------------ */
 
@@ -56,6 +70,8 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
 
   const [fullName, setFullName] = useState("");
   const [designation, setDesignation] = useState("");
+  const [slug, setSlug] = useState("");
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
   const [photoFile, setPhotoFile] = useState<File | null>(null);
@@ -78,12 +94,26 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
     },
   });
 
+  const handleFullNameChange = (value: string) => {
+    setFullName(value);
+    if (!isSlugManuallyEdited) {
+      setSlug(slugify(value));
+    }
+  };
+
+  const handleSlugChange = (value: string) => {
+    setIsSlugManuallyEdited(true);
+    setSlug(slugify(value));
+  };
+
   // Populate form when editing an existing employee
   useEffect(() => {
     if (!initialData) return;
 
     setFullName(initialData.full_name);
     setDesignation(initialData.designation);
+    setSlug(initialData.slug);
+    setIsSlugManuallyEdited(true); // never auto-overwrite an existing slug
     setIsVisible(initialData.status !== "hidden");
     setPhotoPreview(initialData.photo_url);
 
@@ -125,6 +155,7 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
         designation,
         content: editor?.getHTML() ?? "",
         status: isVisible ? "active" : "hidden",
+        slug,
         photo: photoFile,
       });
     } finally {
@@ -208,17 +239,11 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
                       type="text"
                       placeholder="e.g. Ilman Khan"
                       value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
+                      onChange={(e) => handleFullNameChange(e.target.value)}
                       className={`${inputClass} pl-11`}
                       required
                     />
                   </div>
-                  {isEditMode && initialData && (
-                    <p className="text-xs text-gray-400 ml-1">
-                      Public URL: <span className="font-mono">/team/{initialData.slug}</span>{" "}
-                      — stays fixed to preserve printed QR codes
-                    </p>
-                  )}
                 </div>
 
                 <div className="space-y-1.5">
@@ -239,6 +264,31 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* Slug */}
+              <div className="space-y-1.5">
+                <label className="text-sm font-semibold text-gray-700 ml-1">
+                  Public URL Slug *
+                </label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3.5 flex items-center text-gray-400 text-sm">
+                    /team/
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="john-doe"
+                    value={slug}
+                    onChange={(e) => handleSlugChange(e.target.value)}
+                    className={`${inputClass} pl-16 font-mono text-sm`}
+                    required
+                  />
+                </div>
+                <p className="text-xs text-gray-400 ml-1">
+                  {isEditMode
+                    ? "Changing this will break any QR codes or links already printed with the current slug."
+                    : "This becomes the employee's permanent profile URL — choose carefully, it won't change automatically later."}
+                </p>
               </div>
 
               {/* Content editor */}
@@ -338,7 +388,7 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
           {/* Buttons */}
           <div className="flex justify-end">
             <button
-              disabled={!fullName || !designation || isSubmitting}
+              disabled={!fullName || !designation || !slug || isSubmitting}
               className="flex items-center gap-2 px-8 py-2.5 text-sm font-semibold text-white bg-blue-700 rounded-xl hover:bg-blue-800 disabled:opacity-50 transition-all shadow-sm shadow-blue-200"
             >
               {isSubmitting ? (
