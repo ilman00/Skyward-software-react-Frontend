@@ -14,6 +14,9 @@ export interface EmployeeListItem {
 
 export interface EmployeeDetail extends EmployeeListItem {
   content: string;
+  general_information: string;
+  employment_details: string;
+  key_responsibilities: string;
   status: "active" | "hidden";
   created_at?: string;
   updated_at?: string;
@@ -23,12 +26,14 @@ export interface EmployeeFormValues {
   full_name: string;
   designation: string;
   content: string;
+  general_information: string;
+  employment_details: string;
+  key_responsibilities: string;
   display_order?: number;
   status?: "active" | "hidden";
   slug?: string;
   photo?: File | null;
 }
-
 /* ------------------ HELPERS ------------------ */
 
 /**
@@ -41,7 +46,10 @@ const buildEmployeeFormData = (values: EmployeeFormValues): FormData => {
   formData.append("full_name", values.full_name);
   formData.append("designation", values.designation);
   formData.append("content", values.content ?? "");
-
+  formData.append("general_information", values.general_information ?? "");
+  formData.append("employment_details", values.employment_details ?? "");
+  formData.append("key_responsibilities", values.key_responsibilities ?? "");
+  
   if (values.display_order !== undefined) {
     formData.append("display_order", String(values.display_order));
   }
@@ -117,4 +125,13 @@ export const updateEmployee = async (
 
 export const deleteEmployee = async (employeeId: string): Promise<void> => {
   await apiClient.delete(`/employees/${employeeId}`);
+};
+
+export const reorderEmployee = async (
+  employeeId: string,
+  newPosition: number
+): Promise<void> => {
+  await apiClient.patch(`/employees/${employeeId}/reorder`, {
+    new_position: newPosition,
+  });
 };

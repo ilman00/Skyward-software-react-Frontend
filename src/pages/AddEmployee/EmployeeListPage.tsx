@@ -6,6 +6,7 @@ import {
   getEmployeesForAdmin,
   deleteEmployee,
   type EmployeeListItem,
+  reorderEmployee,
 } from "../../services/EmployeeAPIs";
 
 const EmployeeListPage: React.FC = () => {
@@ -13,6 +14,31 @@ const EmployeeListPage: React.FC = () => {
 
   const [employees, setEmployees] = useState<EmployeeListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isReordering, setIsReordering] = useState(false);
+
+  const handleReorder = async (employeeId: string, newPosition: number) => {
+    const previous = employees;
+
+    // Optimistic: rearrange locally so the row moves on click, not on response.
+    const next = [...employees];
+    const currentIndex = next.findIndex((e) => e.employee_id === employeeId);
+    if (currentIndex === -1) return;
+
+    const [moved] = next.splice(currentIndex, 1);
+    next.splice(Math.min(newPosition - 1, next.length), 0, moved);
+    setEmployees(next);
+
+    setIsReordering(true);
+    try {
+      await reorderEmployee(employeeId, newPosition);
+    } catch (error) {
+      setEmployees(previous);
+      toast.error("Failed to reorder");
+      console.error(error);
+    } finally {
+      setIsReordering(false);
+    }
+  };
 
   const loadEmployees = async () => {
     try {
@@ -64,6 +90,8 @@ const EmployeeListPage: React.FC = () => {
     <div className="p-4">
       <EmployeeList
         employees={employees}
+        onReorder={handleReorder}
+        isReordering={isReordering}
         isLoading={isLoading}
         onAdd={handleAdd}
         onEdit={handleEdit}

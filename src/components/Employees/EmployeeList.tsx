@@ -10,6 +10,9 @@ import {
   Eye,
   EyeOff,
   Loader2,
+  ChevronUp,
+  ChevronDown,
+  ChevronsUp,
 } from "lucide-react";
 import type { EmployeeListItem } from "../../services/EmployeeAPIs";
 
@@ -19,12 +22,16 @@ interface Props {
   onAdd: () => void;
   onEdit: (employeeId: string) => void;
   onDelete: (employeeId: string) => void;
+  onReorder: (employeeId: string, newPosition: number) => void;
+  isReordering: boolean;
 }
 
 const CONFIRM_TIMEOUT_MS = 4000;
 
 const EmployeeList: React.FC<Props> = ({
   employees,
+  onReorder,
+  isReordering,
   isLoading,
   onAdd,
   onEdit,
@@ -116,6 +123,7 @@ const EmployeeList: React.FC<Props> = ({
               <table className="w-full text-left">
                 <thead>
                   <tr className="border-b border-gray-200">
+                    <th className="w-20 px-3 py-3"></th>
                     <th className="px-8 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
                       Employee
                     </th>
@@ -131,7 +139,7 @@ const EmployeeList: React.FC<Props> = ({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {employees.map((employee) => {
+                  {employees.map((employee, index) => {
                     const isConfirming = confirmingId === employee.employee_id;
                     const isVisible = employee.status !== "hidden";
 
@@ -140,6 +148,39 @@ const EmployeeList: React.FC<Props> = ({
                         key={employee.employee_id}
                         className="hover:bg-gray-50/50 transition-colors"
                       >
+                        <td className="px-3 py-3">
+                          <div className="flex flex-col items-center gap-0.5">
+                            <button
+                              type="button"
+                              disabled={index === 0 || isReordering}
+                              onClick={() => onReorder(employee.employee_id, index)}
+                              title="Move up"
+                              className="p-1 rounded text-gray-400 hover:bg-gray-100 hover:text-blue-600 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+                            >
+                              <ChevronUp size={16} />
+                            </button>
+
+                            <button
+                              type="button"
+                              disabled={index === 0 || isReordering}
+                              onClick={() => onReorder(employee.employee_id, 1)}
+                              title="Move to top"
+                              className="p-1 rounded text-gray-400 hover:bg-gray-100 hover:text-blue-600 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+                            >
+                              <ChevronsUp size={14} />
+                            </button>
+
+                            <button
+                              type="button"
+                              disabled={index === employees.length - 1 || isReordering}
+                              onClick={() => onReorder(employee.employee_id, index + 2)}
+                              title="Move down"
+                              className="p-1 rounded text-gray-400 hover:bg-gray-100 hover:text-blue-600 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+                            >
+                              <ChevronDown size={16} />
+                            </button>
+                          </div>
+                        </td>
                         <td className="px-8 py-4">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 border border-gray-200 flex items-center justify-center shrink-0">
@@ -163,11 +204,10 @@ const EmployeeList: React.FC<Props> = ({
                         </td>
                         <td className="px-4 py-4">
                           <span
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${
-                              isVisible
-                                ? "bg-green-50 text-green-700"
-                                : "bg-gray-100 text-gray-500"
-                            }`}
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${isVisible
+                              ? "bg-green-50 text-green-700"
+                              : "bg-gray-100 text-gray-500"
+                              }`}
                           >
                             {isVisible ? <Eye size={12} /> : <EyeOff size={12} />}
                             {isVisible ? "Visible" : "Hidden"}

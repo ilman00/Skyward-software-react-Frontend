@@ -1,22 +1,15 @@
 import React, { useEffect, useState, type FormEvent } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Link from "@tiptap/extension-link";
 import {
   User,
   Briefcase,
   Save,
   Loader2,
   Camera,
-
-  Bold as BoldIcon,
-  Italic as ItalicIcon,
-  Link2,
-  List,
-  ListOrdered,
+  FileText,
   Eye,
   EyeOff,
 } from "lucide-react";
+import RichTextEditor from "./RichTextEditor";
 import type { EmployeeDetail, EmployeeFormValues } from "../../services/EmployeeAPIs";
 
 /**
@@ -43,27 +36,7 @@ interface Props {
 const inputClass =
   "w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-gray-700 disabled:bg-gray-50 disabled:text-gray-400";
 
-/* ------------------ TIPTAP TOOLBAR ------------------ */
-
-const ToolbarButton: React.FC<{
-  onClick: () => void;
-  active?: boolean;
-  label: string;
-  children: React.ReactNode;
-}> = ({ onClick, active, label, children }) => (
-  <button
-    type="button"
-    onClick={onClick}
-    aria-label={label}
-    className={`p-2 rounded-lg transition-colors ${
-      active
-        ? "bg-blue-100 text-blue-700"
-        : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-    }`}
-  >
-    {children}
-  </button>
-);
+/* ------------------ COMPONENT ------------------ */
 
 const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -77,22 +50,10 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Link.configure({
-        openOnClick: false,
-        HTMLAttributes: { class: "text-blue-600 underline" },
-      }),
-    ],
-    content: "",
-    editorProps: {
-      attributes: {
-        class:
-          "min-h-[180px] px-4 py-3 focus:outline-none text-gray-700 text-sm leading-relaxed [&_p]:mb-2 [&_ul]:list-disc [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:ml-5",
-      },
-    },
-  });
+  const [content, setContent] = useState("");
+  const [generalInformation, setGeneralInformation] = useState("");
+  const [employmentDetails, setEmploymentDetails] = useState("");
+  const [keyResponsibilities, setKeyResponsibilities] = useState("");
 
   const handleFullNameChange = (value: string) => {
     setFullName(value);
@@ -117,11 +78,11 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
     setIsVisible(initialData.status !== "hidden");
     setPhotoPreview(initialData.photo_url);
 
-    if (editor && initialData.content) {
-      editor.commands.setContent(initialData.content);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialData, editor]);
+    setContent(initialData.content ?? "");
+    setGeneralInformation(initialData.general_information ?? "");
+    setEmploymentDetails(initialData.employment_details ?? "");
+    setKeyResponsibilities(initialData.key_responsibilities ?? "");
+  }, [initialData]);
 
   // Revoke the object URL for locally-selected photos on unmount/replacement
   useEffect(() => {
@@ -153,7 +114,10 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
       await onSubmit({
         full_name: fullName,
         designation,
-        content: editor?.getHTML() ?? "",
+        content,
+        general_information: generalInformation,
+        employment_details: employmentDetails,
+        key_responsibilities: keyResponsibilities,
         status: isVisible ? "active" : "hidden",
         slug,
         photo: photoFile,
@@ -179,7 +143,7 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Card */}
+          {/* Profile Details Card */}
           <section className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
             {/* Section Header */}
             <div className="px-8 py-5 bg-gray-50/50 border-b border-gray-200 flex items-center gap-3">
@@ -220,7 +184,9 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
                         className="hidden"
                       />
                     </label>
-                    <p className="text-xs text-gray-400">JPEG, PNG or WebP, up to 5MB</p>
+                    <p className="text-xs text-gray-400">
+                      JPEG, PNG or WebP, up to 5MB
+                    </p>
                   </div>
                 </div>
               </div>
@@ -273,14 +239,14 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
                 </label>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-3.5 flex items-center text-gray-400 text-sm">
-                    /team/
+                    /our-team/
                   </span>
                   <input
                     type="text"
                     placeholder="john-doe"
                     value={slug}
                     onChange={(e) => handleSlugChange(e.target.value)}
-                    className={`${inputClass} pl-16 font-mono text-sm`}
+                    className={`${inputClass} pl-24 font-mono text-sm`}
                     required
                   />
                 </div>
@@ -291,65 +257,8 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
                 </p>
               </div>
 
-              {/* Content editor */}
-              <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-gray-700 ml-1">
-                  About
-                </label>
-                <div className="border border-gray-300 rounded-lg overflow-hidden focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all">
-                  {editor && (
-                    <div className="flex items-center gap-1 px-3 py-2 bg-gray-50/50 border-b border-gray-200">
-                      <ToolbarButton
-                        label="Bold"
-                        active={editor.isActive("bold")}
-                        onClick={() => editor.chain().focus().toggleBold().run()}
-                      >
-                        <BoldIcon size={16} />
-                      </ToolbarButton>
-                      <ToolbarButton
-                        label="Italic"
-                        active={editor.isActive("italic")}
-                        onClick={() => editor.chain().focus().toggleItalic().run()}
-                      >
-                        <ItalicIcon size={16} />
-                      </ToolbarButton>
-                      <ToolbarButton
-                        label="Bullet list"
-                        active={editor.isActive("bulletList")}
-                        onClick={() => editor.chain().focus().toggleBulletList().run()}
-                      >
-                        <List size={16} />
-                      </ToolbarButton>
-                      <ToolbarButton
-                        label="Numbered list"
-                        active={editor.isActive("orderedList")}
-                        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                      >
-                        <ListOrdered size={16} />
-                      </ToolbarButton>
-                      <ToolbarButton
-                        label="Link"
-                        active={editor.isActive("link")}
-                        onClick={() => {
-                          const previousUrl = editor.getAttributes("link").href as
-                            | string
-                            | undefined;
-                          const url = window.prompt("URL", previousUrl ?? "https://");
-                          if (url === null) return;
-                          if (url === "") {
-                            editor.chain().focus().unsetLink().run();
-                            return;
-                          }
-                          editor.chain().focus().setLink({ href: url }).run();
-                        }}
-                      >
-                        <Link2 size={16} />
-                      </ToolbarButton>
-                    </div>
-                  )}
-                  <EditorContent editor={editor} />
-                </div>
-              </div>
+              {/* About editor */}
+              <RichTextEditor label="About" value={content} onChange={setContent} />
 
               {/* Visibility toggle */}
               <div className="flex items-center justify-between px-4 py-3 bg-gray-50/50 rounded-lg border border-gray-200">
@@ -364,7 +273,8 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
                       {isVisible ? "Visible on website" : "Hidden from website"}
                     </p>
                     <p className="text-xs text-gray-400">
-                      Hidden profiles are kept but removed from the public team directory
+                      Hidden profiles are kept but removed from the public team
+                      directory
                     </p>
                   </div>
                 </div>
@@ -382,6 +292,46 @@ const EmployeeForm: React.FC<Props> = ({ onSubmit, initialData, isEditMode }) =>
                   />
                 </button>
               </div>
+            </div>
+          </section>
+
+          {/* Profile Sections Card */}
+          <section className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="px-8 py-5 bg-gray-50/50 border-b border-gray-200 flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <FileText size={20} className="text-blue-700" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-gray-800">Profile Sections</h2>
+                <p className="text-xs text-gray-500">
+                  Optional — each section appears as its own block on the public
+                  profile
+                </p>
+              </div>
+            </div>
+
+            <div className="p-8 space-y-8">
+              <RichTextEditor
+                label="General Information"
+                hint="Background, education, or anything that doesn't fit the sections below"
+                value={generalInformation}
+                onChange={setGeneralInformation}
+                minHeight="min-h-[140px]"
+              />
+              <RichTextEditor
+                label="Employment Details"
+                hint="Role history, department, tenure"
+                value={employmentDetails}
+                onChange={setEmploymentDetails}
+                minHeight="min-h-[140px]"
+              />
+              <RichTextEditor
+                label="Key Responsibilities"
+                hint="A bulleted list usually reads best here"
+                value={keyResponsibilities}
+                onChange={setKeyResponsibilities}
+                minHeight="min-h-[140px]"
+              />
             </div>
           </section>
 
